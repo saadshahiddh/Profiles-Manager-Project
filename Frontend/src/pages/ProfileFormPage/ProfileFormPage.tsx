@@ -149,13 +149,13 @@ const ProfileFormData = () => {
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
                                                         <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteCoverLetter(cInd)}>X</button>
                                                     </div>
-                                                    {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[ind].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e, ind) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
-                                                    <CKEditor
+                                                    <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                    {/* <CKEditor
                                                         editor={ClassicEditor}
                                                         data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
                                                         onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)}
-                                                    />
+                                                    /> */}
                                                     {(profileErrors.coverLetters && profileErrors.coverLetters[cInd]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[cInd].description}</div>}
                                                 </div>
                                             })
