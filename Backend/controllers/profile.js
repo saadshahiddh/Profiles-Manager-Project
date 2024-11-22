@@ -188,8 +188,8 @@ module.exports = {
             }
 
             if (coverLetters.length) {
-                await Promise.all(coverLetters.map(async ({ description }) => {
-                    let coverLetterData = { description, profileId };
+                await Promise.all(coverLetters.map(async (item) => {
+                    let coverLetterData = { ...item, profileId };
                     if (coverLetterData._id) {
                         await CoverLetter.findByIdAndUpdate(coverLetterData._id, coverLetterData);
                     } else {
@@ -199,8 +199,8 @@ module.exports = {
             }
 
             if (faqs.length) {
-                await Promise.all(faqs.map(async ({ answer, question }) => {
-                    let faqData = { answer, question, profileId };
+                await Promise.all(faqs.map(async (item) => {
+                    let faqData = { ...item, profileId };
                     if (faqData._id) {
                         await Faq.findByIdAndUpdate(faqData._id, faqData);
                     } else {

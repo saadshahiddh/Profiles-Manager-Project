@@ -55,14 +55,14 @@ const ProfileFormData = () => {
 
     function handleCoverLetterInputChange(value: string, index: number) {
         const coverLetters = [...profileData.coverLetters || []];
-        coverLetters[index]['description'] = value;
+        coverLetters[index] = { ...coverLetters[index], description: value };
         setProfileData({ ...profileData, coverLetters });
     }
 
     function handleFaqInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>, index: number) {
         const faqs = [...profileData.faqs || []];
         if (name == 'question' || name == 'answer') {
-            faqs[index][name] = value;
+            faqs[index] = { ...faqs[index], [name]: value };
         }
         setProfileData({ ...profileData, faqs });
     }
@@ -125,7 +125,7 @@ const ProfileFormData = () => {
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
                                                     <CKEditor
                                                         editor={ClassicEditor}
-                                                        data={(profileErrors.coverLetters && profileErrors.coverLetters[ind]?.description) || ''}
+                                                        data={(profileData.coverLetters && profileData.coverLetters[ind]?.description) || ''}
                                                         onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), ind)}
                                                     />
                                                     {(profileErrors.coverLetters && profileErrors.coverLetters[ind]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[ind].description}</div>}
