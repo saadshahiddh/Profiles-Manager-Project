@@ -368,6 +368,31 @@
 					"response": []
 				},
 				{
+					"name": "Get Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-detail/:profileId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-detail",
+								":profileId"
+							],
+							"variable": [
+								{
+									"key": "profileId",
+									"value": "{{profileId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get All",
 					"request": {
 						"method": "GET",
