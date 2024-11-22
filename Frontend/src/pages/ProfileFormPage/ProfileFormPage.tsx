@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { ProfileDetail } from '../../types/profile.types'
 import { CoverLetter } from '../../types/cover-letter.types';
 import { Faq } from '../../types/faq.types';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 const ProfileFormPage = () => {
     const [profileData, setProfileData] = useState<ProfileDetail>({});
@@ -23,9 +26,9 @@ const ProfileFormPage = () => {
         setProfileData({ ...profileData, [name]: value });
     }
 
-    function handleCoverLetterInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>, index: number) {
+    function handleCoverLetterInputChange(value: string, index: number) {
         const coverLetters = [...profileData.coverLetters || []];
-        coverLetters[index][(name as keyof CoverLetter)] = value;
+        coverLetters[index]['description'] = value;
         setProfileData({ ...profileData, coverLetters });
 
     }
@@ -45,7 +48,7 @@ const ProfileFormPage = () => {
         <>
             <div className='w-full flex items-center justify-between'>
                 <div className='text-3xl font-bold'>Profile Form</div>
-                <button onClick={saveProfileData} className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700">
+                <button onClick={saveProfileData} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
                     Save
                 </button>
             </div>
@@ -91,8 +94,13 @@ const ProfileFormPage = () => {
                                             profileData.coverLetters.map((item, ind) => {
                                                 return <div key={ind}>
                                                     <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
-                                                    <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[ind].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e, ind) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                    {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[ind].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e, ind) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
+                                                    <CKEditor
+                                                        editor={ClassicEditor}
+                                                        data={(profileErrors.coverLetters && profileErrors.coverLetters[ind].description) || ''}
+                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), ind)}
+                                                    />
                                                     {(profileErrors.coverLetters && profileErrors.coverLetters[ind].description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[ind].description}</div>}
                                                 </div>
                                             })
