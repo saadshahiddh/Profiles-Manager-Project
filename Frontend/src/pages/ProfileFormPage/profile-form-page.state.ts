@@ -1,10 +1,13 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getProfileDetailApi, saveProfileDetailApi } from "../../apis/profile.apis";
 import { Profile, ProfileDetail } from "../../types/profile.types";
+import { deleteCoverLetterApi } from "../../apis/cover-letter.apis";
+import { CoverLetter } from "../../types/cover-letter.types";
 
 
 const getProfileDetailThunk = createAsyncThunk<ProfileDetail, Profile['_id']>("profile/get-detail", getProfileDetailApi);
 const saveProfileDetailThunk = createAsyncThunk<ProfileDetail, ProfileDetail>("profile/save-detail", saveProfileDetailApi);
+const deleteCoverLetterThunk = createAsyncThunk<boolean, CoverLetter['_id']>("cover-letter/delete", deleteCoverLetterApi);
 
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
@@ -13,12 +16,13 @@ const profileFormSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getProfileDetailThunk.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.profileDetail = action.payload;
             })
             .addCase(saveProfileDetailThunk.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.profileDetail = action.payload;
+            })
+            .addCase(deleteCoverLetterThunk.fulfilled, (state: any, action) => {
+                state.profileDetail.coverLetters = (state.profileDetail.coverLetters || []).filter((x: any) => x._id != action.meta.arg);
             })
     }
 });
@@ -32,5 +36,6 @@ export type ProfileFormDispatch = typeof profileFormStore.dispatch;
 export {
     getProfileDetailThunk,
     saveProfileDetailThunk,
+    deleteCoverLetterThunk,
     profileFormStore,
 };

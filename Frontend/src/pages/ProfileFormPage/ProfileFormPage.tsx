@@ -5,7 +5,7 @@ import { Faq } from '../../types/faq.types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useLocation } from 'react-router-dom';
-import { getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
+import { deleteCoverLetterThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { getProfileDetailApi } from '../../apis/profile.apis';
 
@@ -33,18 +33,6 @@ const ProfileFormData = () => {
     }
     useEffect(() => { if (profileDetail) { setProfileData({ ...emptyProfileDetail, ...profileDetail }) } }, [profileDetail]);
 
-    function addCoverLetter() {
-        const emptyCoverLetter: CoverLetter = { profileId: profileData.profile._id, description: '' };
-        const coverLetters = profileData.coverLetters ? [...profileData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
-        setProfileData({ ...profileData, coverLetters });
-    }
-
-    function addFaq() {
-        const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
-        const faqs = profileData.faqs ? [...profileData.faqs, emptyFaq] : [emptyFaq];
-        setProfileData({ ...profileData, faqs });
-    }
-
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
         const profile = { ...profileData.profile || {} };
         if (name == 'name' || name == 'stack' || name == 'type') { // keyof Profile)[]
@@ -65,6 +53,29 @@ const ProfileFormData = () => {
             faqs[index] = { ...faqs[index], [name]: value };
         }
         setProfileData({ ...profileData, faqs });
+    }
+
+    function addCoverLetter() {
+        const emptyCoverLetter: CoverLetter = { profileId: profileData.profile._id, description: '' };
+        const coverLetters = profileData.coverLetters ? [...profileData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
+        setProfileData({ ...profileData, coverLetters });
+    }
+
+
+    function addFaq() {
+        const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
+        const faqs = profileData.faqs ? [...profileData.faqs, emptyFaq] : [emptyFaq];
+        setProfileData({ ...profileData, faqs });
+    }
+
+    async function deleteCoverLetter(index: number) {
+        const coverLetter = profileData.coverLetters[index];
+        if (coverLetter._id) {
+            await dispatch(deleteCoverLetterThunk(coverLetter._id));
+        } else {
+            const coverLetters = profileData.coverLetters.splice(index, 1);
+            setProfileData({ ...profileData, coverLetters });
+        }
     }
 
     async function saveProfileData() {
@@ -120,7 +131,10 @@ const ProfileFormData = () => {
                                         {
                                             profileData.coverLetters.map((item, ind) => {
                                                 return <div key={ind}>
-                                                    <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
+                                                    <div className='w-full flex items-center justify-between'>
+                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
+                                                        <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteCoverLetter(ind)}>X</button>
+                                                    </div>
                                                     {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[ind].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e, ind) }}
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
                                                     <CKEditor

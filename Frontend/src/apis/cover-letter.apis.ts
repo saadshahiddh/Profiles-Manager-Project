@@ -11,7 +11,7 @@ import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
  */
 export async function createCoverLetterApi(coverLetter: CoverLetter): Promise<CoverLetter> {
     try {
-        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.post('coverLetter/create', coverLetter)).data;
+        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.post('cover-letter/create', coverLetter)).data;
         showApiSuccessToast(resp.message);
         return resp.coverLetter;
     } catch (err: any) {
@@ -29,7 +29,7 @@ export async function createCoverLetterApi(coverLetter: CoverLetter): Promise<Co
  */
 export async function updateCoverLetterApi(coverLetter: CoverLetter): Promise<CoverLetter> {
     try {
-        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.patch('coverLetter/update', coverLetter)).data;
+        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.patch('cover-letter/update', coverLetter)).data;
         showApiSuccessToast(resp.message);
         return resp.coverLetter;
     } catch (err: any) {
@@ -47,7 +47,7 @@ export async function updateCoverLetterApi(coverLetter: CoverLetter): Promise<Co
  */
 export async function getCoverLetterApi(_id: CoverLetter['_id']): Promise<CoverLetter> {
     try {
-        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.get(`coverLetter/get/${_id}`)).data;
+        const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = (await axiosInstance.get(`cover-letter/get/${_id}`)).data;
         showApiSuccessToast(resp.message);
         return resp.coverLetter;
     } catch (err: any) {
@@ -65,7 +65,7 @@ export async function getCoverLetterApi(_id: CoverLetter['_id']): Promise<CoverL
  */
 export async function deleteCoverLetterApi(_id: CoverLetter['_id']): Promise<boolean> {
     try {
-        const resp: (BackendApiResponse) = (await axiosInstance.delete(`coverLetter/delete/${_id}`)).data;
+        const resp: (BackendApiResponse) = (await axiosInstance.delete(`cover-letter/delete/${_id}`)).data;
         showApiSuccessToast(resp.message);
         return true;
     } catch (err: any) {
@@ -82,7 +82,7 @@ export async function deleteCoverLetterApi(_id: CoverLetter['_id']): Promise<boo
  */
 export async function getAllCoverLettersApi(): Promise<CoverLetter[]> {
     try {
-        const resp: (BackendApiResponse & { coverLetters: CoverLetter[] }) = (await axiosInstance.get('coverLetter/get-all')).data;
+        const resp: (BackendApiResponse & { coverLetters: CoverLetter[] }) = (await axiosInstance.get('cover-letter/get-all')).data;
         return resp.coverLetters;
     } catch (err: any) {
         const error: BackendApiResponse = err.response.data;
