@@ -7,6 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useLocation } from 'react-router-dom';
 import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
+import { FaTrash, FaCopy, FaCheck } from 'react-icons/fa';
 
 
 const ProfileFormPage = () => {
@@ -26,6 +27,7 @@ const ProfileFormData = () => {
     const emptyProfileDetail: ProfileDetail = { profile: {}, coverLetters: [], faqs: [] };
     const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
     const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
+    const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
 
     if (profileId) {
         useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
@@ -70,6 +72,13 @@ const ProfileFormData = () => {
         const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
         const faqs = profileData.faqs ? [...profileData.faqs, emptyFaq] : [emptyFaq];
         setProfileData({ ...profileData, faqs });
+    }
+
+    async function copyCoverLetter(index: number) {
+        const coverLetter = profileData.coverLetters[index];
+        navigator.clipboard.writeText(coverLetter.description || '');
+        setCoverLetterCopiedIndex(index);
+        setTimeout(() => setCoverLetterCopiedIndex(null), 1000);
     }
 
     async function deleteCoverLetter(index: number) {
@@ -147,7 +156,14 @@ const ProfileFormData = () => {
                                                 return <div key={cInd}>
                                                     <div className='w-full flex items-center justify-between'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
-                                                        <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteCoverLetter(cInd)}>X</button>
+                                                        <div>
+                                                            <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == cInd ? 'bg-blue-500' : 'bg-gray-500'}`} onClick={() => copyCoverLetter(cInd)}>
+                                                                {coverLetterCopiedIndex == cInd ? <FaCheck /> : <FaCopy />}
+                                                            </button>
+                                                            <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteCoverLetter(cInd)}>
+                                                                <FaTrash />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
