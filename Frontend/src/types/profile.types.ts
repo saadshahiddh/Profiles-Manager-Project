@@ -1,3 +1,6 @@
+import { CoverLetter } from "./cover-letter.types";
+import { Faq } from "./faq.types";
+
 export interface Profile {
     _id?: string,
     name?: string,
@@ -5,4 +8,9 @@ export interface Profile {
     type?: string,
     createdAt?: Date,
     updatedAt?: Date,
+}
+
+export interface ProfileDetail extends Profile {
+    coverLetters?: CoverLetter[],
+    faqs?: Faq[],
 }

@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import ProfilesPage from './pages/ProfilesPage/ProfilesPage'
 import MainLayout from './layouts/MainLayout/MainLayout'
+import ProfileFormPage from './pages/ProfileForm/ProfileFormPage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
           <Route path='' element={<MainLayout />}>
             <Route path='/profiles' element={<ProfilesPage />} />
+            <Route path='/profile-form' element={<ProfileFormPage />} />
           </Route>
 
         </Routes>
