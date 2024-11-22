@@ -92,6 +92,22 @@ export async function getAllProfilesApi(): Promise<Profile[]> {
 }
 
 
+/**
+ * Get all profile details api
+ * @returns 
+ */
+export async function getAllProfileDetailsApi(): Promise<ProfileDetail[]> {
+    try {
+        const resp: (BackendApiResponse & { profileDetails: ProfileDetail[] }) = (await axiosInstance.get('profile/get-all-details')).data;
+        return resp.profileDetails;
+    } catch (err: any) {
+        const error: BackendApiResponse = err.response.data;
+        showApiErrorToast(error.message);
+        throw error;
+    }
+}
+
+
 
 /**
  * Get profile detail api

@@ -14,7 +14,7 @@ const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", delet
 
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
-    initialState: { profileDetail: {} },
+    initialState: { profileDetail: {} as ProfileDetail },
     reducers: {},
     extraReducers: builder => {
         builder

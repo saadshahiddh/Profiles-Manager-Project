@@ -4,7 +4,7 @@ import { CoverLetter } from '../../types/cover-letter.types';
 import { Faq } from '../../types/faq.types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck } from 'react-icons/fa';
@@ -12,13 +12,14 @@ import { FaTrash, FaCopy, FaCheck } from 'react-icons/fa';
 
 const ProfileFormPage = () => {
     return <Provider store={profileFormStore}>
-        <ProfileFormData />
+        <ProfileFormContent />
     </Provider>
 }
 
 
-const ProfileFormData = () => {
+const ProfileFormContent = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
 
     const { profileDetail } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
@@ -34,7 +35,7 @@ const ProfileFormData = () => {
     }
     useEffect(() => {
         if (profileDetail) {
-            console.log(profileDetail);
+            // console.log(profileDetail);
             setProfileData({ ...emptyProfileDetail, ...profileDetail })
         }
     }, [profileDetail]);
@@ -103,6 +104,7 @@ const ProfileFormData = () => {
 
     async function saveProfileData() {
         await dispatch(saveProfileDetailThunk(profileData));
+        navigate('/profiles');
     }
 
     return (

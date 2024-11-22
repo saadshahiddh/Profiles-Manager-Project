@@ -1,6 +1,6 @@
 const { CoverLetter, Faq, Profile } = require("../database");
 const { StatusCodes } = require("http-status-codes");
-const { generateApiResponse } = require("../services/utilities");
+const { generateApiResponse, formatMongooseData } = require("../services/utilities");
 
 
 
@@ -120,6 +120,35 @@ module.exports = {
                 res, StatusCodes.OK, true,
                 "All Profiles fetched successfully!",
                 { profiles: allProfiles }
+            );
+        } catch (error) {
+            return generateApiResponse(
+                res, StatusCodes.INTERNAL_SERVER_ERROR, false,
+                "Error occurred in getting All Profiles!",
+                { error }
+            );
+        }
+    },
+
+
+
+    /**
+    * Get all profile details
+    */
+    async getAllProfileDetails(req, res) {
+        try {
+            const allProfiles = formatMongooseData(await Profile.find().sort({ createdAt: -1 }));
+
+            const allProfileDetails = await Promise.all(allProfiles.map(async (profile) => {
+                const coverLetters = await CoverLetter.find({ profileId: profile?._id });
+                const faqs = await Faq.find({ profileId: profile?._id });
+                return { profile, coverLetters, faqs }
+            }));
+
+            return generateApiResponse(
+                res, StatusCodes.OK, true,
+                "All Profiles fetched successfully!",
+                { profileDetails: allProfileDetails }
             );
         } catch (error) {
             return generateApiResponse(
