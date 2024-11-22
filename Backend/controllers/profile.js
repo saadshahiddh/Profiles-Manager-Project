@@ -170,22 +170,26 @@ module.exports = {
      */
     async saveProfileDetail(req, res) {
         try {
-            const { _id, name, stack, type, faqs, coverLetters } = req.body;
+            const { profile, faqs, coverLetters } = req.body;
 
-            const profileAction = _id ? 'created' : 'updated';
-            let profileData = {};
+            let profileId = profile?._id;
+            const profileAction = profileId ? 'created' : 'updated';
 
-            if (_id) {
-                profileData = await Profile.findByIdAndUpdate(
-                    _id, { name, stack, type }, { new: true },
+            const { name = '', stack = '', type = '' } = profile || {};
+            const profileData = { name, stack, type };
+            if (profileId) {
+                const updatedProfile = await Profile.findByIdAndUpdate(
+                    profileId, profileData, { new: true },
                 );
+                profileId = updatedProfile?._id;
             } else {
-                profileData = await Profile.create(_id, { name, stack, type });
+                const createdProfile = await Profile.create(profileData);
+                profileId = createdProfile?._id;
             }
 
             if (coverLetters.length) {
-                await Promise.all(coverLetters.map(async (item) => {
-                    let coverLetterData = { ...item, profileId: profileData?._id };
+                await Promise.all(coverLetters.map(async ({ description }) => {
+                    let coverLetterData = { description, profileId };
                     if (coverLetterData._id) {
                         await CoverLetter.findByIdAndUpdate(coverLetterData._id, coverLetterData);
                     } else {
@@ -195,23 +199,29 @@ module.exports = {
             }
 
             if (faqs.length) {
-                await Promise.all(faqs.map(async (item) => {
-                    let faqData = { ...item, profileId: profileData?._id };
+                await Promise.all(faqs.map(async ({ answer, question }) => {
+                    let faqData = { answer, question, profileId };
                     if (faqData._id) {
                         await Faq.findByIdAndUpdate(faqData._id, faqData);
                     } else {
                         await Faq.create(faqData);
                     }
                 }));
-            }
+            };
 
+            let profileDetail = {};
+            profileDetail['profile'] = await Profile.findById(profileId);
+            profileDetail['coverLetters'] = await CoverLetter.find({ profileId }).sort({ createdAt: -1 });
+            profileDetail['faqs'] = await Faq.find({ profileId }).sort({ createdAt: -1 });
 
             return generateApiResponse(
                 res, StatusCodes.OK, true,
                 "Profile detail saved successfully!",
-                { profile: profileData, profileAction }
+                { profileDetail, profileAction }
             );
         } catch (error) {
+            console.log(error);
+
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
                 "Error occurred in saving Profile detail!",

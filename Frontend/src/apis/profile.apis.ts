@@ -1,5 +1,5 @@
 import { BackendApiResponse } from "../types/global.types";
-import { Profile } from "../types/profile.types";
+import { Profile, ProfileDetail } from "../types/profile.types";
 import axiosInstance from "../utilities/axios-instance";
 import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
 
@@ -98,11 +98,29 @@ export async function getAllProfilesApi(): Promise<Profile[]> {
  * @param id 
  * @returns 
  */
-export async function getProfileDetailApi(_id: Profile['_id']): Promise<Profile> {
+export async function getProfileDetailApi(_id: Profile['_id']): Promise<ProfileDetail> {
     try {
-        const resp: (BackendApiResponse & { profile: Profile }) = (await axiosInstance.get(`profile/get-detail/${_id}`)).data;
+        const resp: (BackendApiResponse & { profileDetail: ProfileDetail }) = (await axiosInstance.get(`profile/get-detail/${_id}`)).data;
+        return resp.profileDetail;
+    } catch (err: any) {
+        const error: BackendApiResponse = err.response.data;
+        showApiErrorToast(error.message);
+        throw error;
+    }
+}
+
+
+
+/**
+ * Save profile detail api
+ * @param id 
+ * @returns 
+ */
+export async function saveProfileDetailApi(profileDetail: ProfileDetail): Promise<ProfileDetail> {
+    try {
+        const resp: (BackendApiResponse & { profileDetail: ProfileDetail }) = (await axiosInstance.patch('profile/save-detail', profileDetail)).data;
         showApiSuccessToast(resp.message);
-        return resp.profile;
+        return resp.profileDetail;
     } catch (err: any) {
         const error: BackendApiResponse = err.response.data;
         showApiErrorToast(error.message);

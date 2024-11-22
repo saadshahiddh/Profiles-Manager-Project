@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import './App.css'
+import 'react-toastify/ReactToastify.min.css'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import ProfilesPage from './pages/ProfilesPage/ProfilesPage'
@@ -26,6 +26,7 @@ function App() {
             <Route path='/profile-form' element={<ProfileFormPage />} />
           </Route>
 
+          <Route path='*' element={<div className='w-full h-full flex items-center justify-center text-xl text-gray-600'>Page Not Found</div>} />
         </Routes>
       </BrowserRouter >
     </>

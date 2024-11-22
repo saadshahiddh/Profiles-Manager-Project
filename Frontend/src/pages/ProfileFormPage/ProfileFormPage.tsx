@@ -1,15 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { ProfileDetail } from '../../types/profile.types'
+import { Profile, ProfileDetail } from '../../types/profile.types'
 import { CoverLetter } from '../../types/cover-letter.types';
 import { Faq } from '../../types/faq.types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useLocation } from 'react-router-dom';
+import { getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { getProfileDetailApi } from '../../apis/profile.apis';
 
 
 const ProfileFormPage = () => {
+    return <Provider store={profileFormStore}>
+        <ProfileFormData />
+    </Provider>
+}
+
+
+const ProfileFormData = () => {
+    const location = useLocation();
+    const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
+
+    const { profileDetail } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
+    const dispatch: ProfileFormDispatch = useDispatch();
+
     const emptyProfileDetail: ProfileDetail = { profile: {}, coverLetters: [], faqs: [] };
     const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
     const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
+
+    if (profileId) {
+        useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
+    }
+    useEffect(() => { if (profileDetail) { setProfileData({ ...emptyProfileDetail, ...profileDetail }) } }, [profileDetail]);
 
     function addCoverLetter() {
         const emptyCoverLetter: CoverLetter = { profileId: profileData.profile._id, description: '' };
@@ -45,8 +67,8 @@ const ProfileFormPage = () => {
         setProfileData({ ...profileData, faqs });
     }
 
-    function saveProfileData() {
-        console.log(profileData);
+    async function saveProfileData() {
+        await dispatch(saveProfileDetailThunk(profileData));
     }
 
     return (
@@ -63,19 +85,19 @@ const ProfileFormPage = () => {
                     <div className='w-full grid grid-cols-2 gap-3'>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
-                            <input type="text" placeholder='John Doe' name='name' value={profileData.profile.name || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='John Doe' name='name' value={profileData.profile?.name || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.profile.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.name}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Type</div>
-                            <input type="text" placeholder='Professional' name='type' value={profileData.profile.type || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='Professional' name='type' value={profileData.profile?.type || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.profile.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.type}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Stack</div>
-                            <input type="text" placeholder='MERN' name='stack' value={profileData.profile.stack || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='MERN' name='stack' value={profileData.profile?.stack || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.profile.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.stack}</div>}
                         </div>
