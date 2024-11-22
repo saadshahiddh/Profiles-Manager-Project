@@ -3,11 +3,14 @@ import { getProfileDetailApi, saveProfileDetailApi } from "../../apis/profile.ap
 import { Profile, ProfileDetail } from "../../types/profile.types";
 import { deleteCoverLetterApi } from "../../apis/cover-letter.apis";
 import { CoverLetter } from "../../types/cover-letter.types";
+import { Faq } from "../../types/faq.types";
+import { deleteFaqApi } from "../../apis/faq.apis";
 
 
 const getProfileDetailThunk = createAsyncThunk<ProfileDetail, Profile['_id']>("profile/get-detail", getProfileDetailApi);
 const saveProfileDetailThunk = createAsyncThunk<ProfileDetail, ProfileDetail>("profile/save-detail", saveProfileDetailApi);
 const deleteCoverLetterThunk = createAsyncThunk<boolean, CoverLetter['_id']>("cover-letter/delete", deleteCoverLetterApi);
+const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", deleteFaqApi);
 
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
@@ -24,6 +27,9 @@ const profileFormSlice = createSlice({
             .addCase(deleteCoverLetterThunk.fulfilled, (state: any, action) => {
                 state.profileDetail.coverLetters = (state.profileDetail.coverLetters || []).filter((x: any) => x._id != action.meta.arg);
             })
+            .addCase(deleteFaqThunk.fulfilled, (state: any, action) => {
+                state.profileDetail.faqs = (state.profileDetail.faqs || []).filter((x: any) => x._id != action.meta.arg);
+            })
     }
 });
 
@@ -38,4 +44,5 @@ export {
     saveProfileDetailThunk,
     deleteCoverLetterThunk,
     profileFormStore,
+    deleteFaqThunk,
 };

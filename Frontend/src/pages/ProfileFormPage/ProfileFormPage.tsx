@@ -5,9 +5,8 @@ import { Faq } from '../../types/faq.types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useLocation } from 'react-router-dom';
-import { deleteCoverLetterThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
+import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { getProfileDetailApi } from '../../apis/profile.apis';
 
 
 const ProfileFormPage = () => {
@@ -31,7 +30,12 @@ const ProfileFormData = () => {
     if (profileId) {
         useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
     }
-    useEffect(() => { if (profileDetail) { setProfileData({ ...emptyProfileDetail, ...profileDetail }) } }, [profileDetail]);
+    useEffect(() => {
+        if (profileDetail) {
+            console.log(profileDetail);
+            setProfileData({ ...emptyProfileDetail, ...profileDetail })
+        }
+    }, [profileDetail]);
 
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
         const profile = { ...profileData.profile || {} };
@@ -73,8 +77,18 @@ const ProfileFormData = () => {
         if (coverLetter._id) {
             await dispatch(deleteCoverLetterThunk(coverLetter._id));
         } else {
-            const coverLetters = profileData.coverLetters.splice(index, 1);
+            const coverLetters = profileData.coverLetters.filter((_, i) => i != index);
             setProfileData({ ...profileData, coverLetters });
+        }
+    }
+
+    async function deleteFaq(index: number) {
+        const faq = profileData.faqs[index];
+        if (faq._id) {
+            await dispatch(deleteFaqThunk(faq._id));
+        } else {
+            const faqs = profileData.faqs.filter((_, i) => i != index);
+            setProfileData({ ...profileData, faqs });
         }
     }
 
@@ -129,20 +143,20 @@ const ProfileFormData = () => {
                                 (
                                     <div className="w-full grid grid-cols-2 gap-1">
                                         {
-                                            profileData.coverLetters.map((item, ind) => {
-                                                return <div key={ind}>
+                                            profileData.coverLetters.map((item, cInd) => {
+                                                return <div key={cInd}>
                                                     <div className='w-full flex items-center justify-between'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
-                                                        <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteCoverLetter(ind)}>X</button>
+                                                        <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteCoverLetter(cInd)}>X</button>
                                                     </div>
                                                     {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[ind].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e, ind) }}
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
                                                     <CKEditor
                                                         editor={ClassicEditor}
-                                                        data={(profileData.coverLetters && profileData.coverLetters[ind]?.description) || ''}
-                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), ind)}
+                                                        data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
+                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)}
                                                     />
-                                                    {(profileErrors.coverLetters && profileErrors.coverLetters[ind]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[ind].description}</div>}
+                                                    {(profileErrors.coverLetters && profileErrors.coverLetters[cInd]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[cInd].description}</div>}
                                                 </div>
                                             })
                                         }
@@ -175,19 +189,25 @@ const ProfileFormData = () => {
                             profileData.faqs?.length ? (
                                 <div className="w-full">
                                     {
-                                        profileData.faqs.map((item, ind) => {
-                                            return <div key={ind} className='border-b grid grid-cols-4 gap-1 pb-2 mb-3'>
-                                                <div className='col-span-1'>
-                                                    <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
-                                                    <input type="text" placeholder='John Doe' name='question' value={(profileData.faqs && profileData.faqs[ind].question) || ''} onChange={(e) => { handleFaqInputChange(e, ind) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    {(profileErrors.faqs && profileErrors.faqs[ind]?.question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].question}</div>}
+                                        profileData.faqs.map((item, fInd) => {
+                                            return <div key={fInd} className='border-b pb-2 mb-3'>
+                                                <div className='w-full flex items-center justify-between'>
+                                                    <div></div>
+                                                    <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteFaq(fInd)}>X</button>
                                                 </div>
-                                                <div className='col-span-3'>
-                                                    <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
-                                                    <input type="text" placeholder='John Doe' name='answer' value={(profileData.faqs && profileData.faqs[ind].answer) || ''} onChange={(e) => { handleFaqInputChange(e, ind) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    {(profileErrors.faqs && profileErrors.faqs[ind]?.answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].answer}</div>}
+                                                <div className='grid grid-cols-4 gap-1'>
+                                                    <div className='col-span-1'>
+                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
+                                                        <input type="text" placeholder='John Doe' name='question' value={(profileData.faqs && profileData.faqs[fInd].question) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                        {(profileErrors.faqs && profileErrors.faqs[fInd]?.question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].question}</div>}
+                                                    </div>
+                                                    <div className='col-span-3'>
+                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
+                                                        <input type="text" placeholder='John Doe' name='answer' value={(profileData.faqs && profileData.faqs[fInd].answer) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                        {(profileErrors.faqs && profileErrors.faqs[fInd]?.answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].answer}</div>}
+                                                    </div>
                                                 </div>
                                             </div>
                                         })

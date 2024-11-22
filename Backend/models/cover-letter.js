@@ -8,7 +8,7 @@ const coverLetterSchema = new mongoose.Schema({
 
 coverLetterSchema.virtual(PopulateReferences.SINGLE_PROFILE, { ref: ModelReferences.PROFILE, localField: 'profileId', foreignField: '_id', justOne: true });
 
-coverLetterSchema.set('toJSON', { virtuals: true });
+coverLetterSchema.set('toJSON', { virtuals: true, transform: (doc, rec) => { delete rec.id } });
 coverLetterSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model(ModelReferences.COVER_LETTER, coverLetterSchema);

@@ -9,7 +9,7 @@ const faqSchema = new mongoose.Schema({
 
 faqSchema.virtual(PopulateReferences.SINGLE_PROFILE, { ref: ModelReferences.PROFILE, localField: 'profileId', foreignField: '_id', justOne: true });
 
-faqSchema.set('toJSON', { virtuals: true });
+faqSchema.set('toJSON', { virtuals: true, transform: (doc, rec) => { delete rec.id } });
 faqSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model(ModelReferences.FAQ, faqSchema);

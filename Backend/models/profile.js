@@ -7,6 +7,7 @@ const profileSchema = new mongoose.Schema({
     type: { type: String, default: '' },
 }, { timestamps: true });
 
+profileSchema.set('toJSON', { virtuals: true, transform: (doc, rec) => { delete rec.id } });
 profileSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model(ModelReferences.PROFILE, profileSchema);

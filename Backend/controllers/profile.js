@@ -145,8 +145,8 @@ module.exports = {
 
             if (isFound) {
                 profileDetail['profile'] = foundProfile;
-                profileDetail['coverLetters'] = await CoverLetter.find({ profileId }).sort({ createdAt: -1 });
-                profileDetail['faqs'] = await Faq.find({ profileId }).sort({ createdAt: -1 });
+                profileDetail['coverLetters'] = await CoverLetter.find({ profileId });
+                profileDetail['faqs'] = await Faq.find({ profileId });
             }
 
             return generateApiResponse(
@@ -211,8 +211,8 @@ module.exports = {
 
             let profileDetail = {};
             profileDetail['profile'] = await Profile.findById(profileId);
-            profileDetail['coverLetters'] = await CoverLetter.find({ profileId }).sort({ createdAt: -1 });
-            profileDetail['faqs'] = await Faq.find({ profileId }).sort({ createdAt: -1 });
+            profileDetail['coverLetters'] = await CoverLetter.find({ profileId });
+            profileDetail['faqs'] = await Faq.find({ profileId });
 
             return generateApiResponse(
                 res, StatusCodes.OK, true,
