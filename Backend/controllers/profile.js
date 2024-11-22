@@ -109,6 +109,29 @@ module.exports = {
 
 
 
+
+    /**
+    * Get all profiles
+    */
+    async getAllProfiles(req, res) {
+        try {
+            const allProfiles = await Profile.find().sort({ createdAt: -1 });
+            return generateApiResponse(
+                res, StatusCodes.OK, true,
+                "All Profiles fetched successfully!",
+                { profiles: allProfiles }
+            );
+        } catch (error) {
+            return generateApiResponse(
+                res, StatusCodes.INTERNAL_SERVER_ERROR, false,
+                "Error occurred in getting All Profiles!",
+                { error }
+            );
+        }
+    },
+
+
+
     /**
     * Get profile detail
     */
@@ -143,23 +166,59 @@ module.exports = {
 
 
     /**
-    * Get all profiles
-    */
-    async getAllProfiles(req, res) {
+     * Save profile detail
+     */
+    async saveProfileDetail(req, res) {
         try {
-            const allProfiles = await Profile.find().sort({ createdAt: -1 });
+            const { _id, name, stack, type, faqs, coverLetters } = req.body;
+
+            const profileAction = _id ? 'created' : 'updated';
+            let profileData = {};
+
+            if (_id) {
+                profileData = await Profile.findByIdAndUpdate(
+                    _id, { name, stack, type }, { new: true },
+                );
+            } else {
+                profileData = await Profile.create(_id, { name, stack, type });
+            }
+
+            if (coverLetters.length) {
+                await Promise.all(coverLetters.map(async (item) => {
+                    let coverLetterData = { ...item, profileId: profileData?._id };
+                    if (coverLetterData._id) {
+                        await CoverLetter.findByIdAndUpdate(coverLetterData._id, coverLetterData);
+                    } else {
+                        await CoverLetter.create(coverLetterData);
+                    }
+                }));
+            }
+
+            if (faqs.length) {
+                await Promise.all(faqs.map(async (item) => {
+                    let faqData = { ...item, profileId: profileData?._id };
+                    if (faqData._id) {
+                        await Faq.findByIdAndUpdate(faqData._id, faqData);
+                    } else {
+                        await Faq.create(faqData);
+                    }
+                }));
+            }
+
+
             return generateApiResponse(
                 res, StatusCodes.OK, true,
-                "All Profiles fetched successfully!",
-                { profiles: allProfiles }
+                "Profile detail saved successfully!",
+                { profile: profileData, profileAction }
             );
         } catch (error) {
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
-                "Error occurred in getting All Profiles!",
+                "Error occurred in saving Profile detail!",
                 { error }
             );
         }
     },
+
 
 }

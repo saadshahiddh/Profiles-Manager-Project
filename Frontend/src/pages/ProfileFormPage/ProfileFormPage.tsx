@@ -7,31 +7,36 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 const ProfileFormPage = () => {
-    const [profileData, setProfileData] = useState<ProfileDetail>({});
-    const [profileErrors, setProfileErrors] = useState<ProfileDetail>({});
+    const emptyProfileDetail: ProfileDetail = { profile: {}, coverLetters: [], faqs: [] };
+    const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
+    const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
 
     function addCoverLetter() {
-        const emptyCoverLetter: CoverLetter = { profileId: profileData._id };
+        const emptyCoverLetter: CoverLetter = { profileId: profileData.profile._id, description: '' };
         const coverLetters = profileData.coverLetters ? [...profileData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
         setProfileData({ ...profileData, coverLetters });
     }
 
     function addFaq() {
-        const emptyFaq: Faq = { profileId: profileData._id };
+        const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
         const faqs = profileData.faqs ? [...profileData.faqs, emptyFaq] : [emptyFaq];
         setProfileData({ ...profileData, faqs });
     }
 
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
-        setProfileData({ ...profileData, [name]: value });
+        const profile = { ...profileData.profile || {} };
+        if (name == 'name' || name == 'stack' || name == 'type') { // keyof Profile)[]
+            profile[name] = value;
+        }
+        setProfileData({ ...profileData, profile });
     }
 
     function handleCoverLetterInputChange(value: string, index: number) {
         const coverLetters = [...profileData.coverLetters || []];
         coverLetters[index]['description'] = value;
         setProfileData({ ...profileData, coverLetters });
-
     }
+
     function handleFaqInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>, index: number) {
         const faqs = [...profileData.faqs || []];
         if (name == 'question' || name == 'answer') {
@@ -58,21 +63,21 @@ const ProfileFormPage = () => {
                     <div className='w-full grid grid-cols-2 gap-3'>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
-                            <input type="text" placeholder='John Doe' name='name' value={profileData.name || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='John Doe' name='name' value={profileData.profile.name || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.name}</div>}
+                            {profileErrors.profile.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.name}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Type</div>
-                            <input type="text" placeholder='Professional' name='type' value={profileData.type || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='Professional' name='type' value={profileData.profile.type || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.type}</div>}
+                            {profileErrors.profile.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.type}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Stack</div>
-                            <input type="text" placeholder='MERN' name='stack' value={profileData.stack || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='MERN' name='stack' value={profileData.profile.stack || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.stack}</div>}
+                            {profileErrors.profile.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.stack}</div>}
                         </div>
                     </div>
 
@@ -98,10 +103,10 @@ const ProfileFormPage = () => {
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
                                                     <CKEditor
                                                         editor={ClassicEditor}
-                                                        data={(profileErrors.coverLetters && profileErrors.coverLetters[ind].description) || ''}
+                                                        data={(profileErrors.coverLetters && profileErrors.coverLetters[ind]?.description) || ''}
                                                         onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), ind)}
                                                     />
-                                                    {(profileErrors.coverLetters && profileErrors.coverLetters[ind].description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[ind].description}</div>}
+                                                    {(profileErrors.coverLetters && profileErrors.coverLetters[ind]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[ind].description}</div>}
                                                 </div>
                                             })
                                         }
@@ -140,13 +145,13 @@ const ProfileFormPage = () => {
                                                     <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
                                                     <input type="text" placeholder='John Doe' name='question' value={(profileData.faqs && profileData.faqs[ind].question) || ''} onChange={(e) => { handleFaqInputChange(e, ind) }}
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    {(profileErrors.faqs && profileErrors.faqs[ind].question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].question}</div>}
+                                                    {(profileErrors.faqs && profileErrors.faqs[ind]?.question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].question}</div>}
                                                 </div>
                                                 <div className='col-span-3'>
                                                     <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
                                                     <input type="text" placeholder='John Doe' name='answer' value={(profileData.faqs && profileData.faqs[ind].answer) || ''} onChange={(e) => { handleFaqInputChange(e, ind) }}
                                                         className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    {(profileErrors.faqs && profileErrors.faqs[ind].answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].answer}</div>}
+                                                    {(profileErrors.faqs && profileErrors.faqs[ind]?.answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[ind].answer}</div>}
                                                 </div>
                                             </div>
                                         })
