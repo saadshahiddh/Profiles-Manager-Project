@@ -2,6 +2,30 @@ import { toast } from "react-toastify";
 
 
 /**
+ * Present toast
+ * @param message 
+ * @param type 
+ */
+export function presentToast(message: string, type?: 'success' | 'warning' | 'error') {
+    const toastConfig = { closeButton: false, pauseOnHover: false, hideProgressBar: true };
+    switch (type) {
+        case 'success':
+            toast.success(message, toastConfig);
+            break;
+        case 'warning':
+            toast.warning(message, toastConfig);
+            break;
+        case 'error':
+            toast.error(message, toastConfig);
+            break;
+        default:
+            toast.info(message, toastConfig);
+            break;
+    }
+}
+
+
+/**
  * Show api success toast
  * @param message 
  */
