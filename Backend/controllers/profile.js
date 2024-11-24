@@ -1,6 +1,7 @@
 const { CoverLetter, Faq, Profile } = require("../database");
 const { StatusCodes } = require("http-status-codes");
 const { generateApiResponse, formatMongooseData } = require("../services/utilities");
+const { ModelReferences, PopulateReferences } = require("../utils/database-reference");
 
 
 
@@ -140,18 +141,42 @@ module.exports = {
     */
     async getAllProfileDetails(req, res) {
         try {
-            const allProfiles = formatMongooseData(await Profile.find().sort({ createdAt: -1 }));
+            const allProfileDetails = await Profile.aggregate([
+                { $sort: { createdAt: -1 }, },
+                {
+                    $lookup: {
+                        from: PopulateReferences.MULTIPLE_COVER_LETTER,
+                        localField: '_id',
+                        foreignField: 'profileId',
+                        as: 'coverLetters',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: PopulateReferences.MULTIPLE_FAQ,
+                        localField: '_id',
+                        foreignField: 'profileId',
+                        as: 'faqs',
+                    },
+                },
+                {
+                    $addFields: {
+                        coverLetters: { $slice: ['$coverLetters', 3] },
+                        faqs: { $slice: ['$faqs', 3] },
+                    },
+                },
+            ]);
 
-            const allProfileDetails = await Promise.all(allProfiles.map(async (profile) => {
-                const coverLetters = await CoverLetter.find({ profileId: profile?._id}).limit(3);
-                const faqs = await Faq.find({ profileId: profile?._id}).limit(3);
-                return { profile, coverLetters, faqs }
-            }));
+            const allProfileDetailsFormatted = formatMongooseData(allProfileDetails).map((profileDetail) => {
+                const { _id, name, stack, type, createdAt } = profileDetail;
+                profileDetail['profile'] = { _id, name, stack, type, createdAt };
+                return profileDetail;
+            })
 
             return generateApiResponse(
                 res, StatusCodes.OK, true,
                 "All Profiles fetched successfully!",
-                { profileDetails: allProfileDetails }
+                { profileDetails: allProfileDetailsFormatted }
             );
         } catch (error) {
             return generateApiResponse(
