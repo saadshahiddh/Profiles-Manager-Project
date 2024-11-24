@@ -38,6 +38,7 @@ const LoginPage = () => {
 
   function handleInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
     setLoginData(prevData => { return { ...prevData, [name]: value } });
+    setLoginFormErrors(prevData => { return { ...prevData, [name]: '' } });
   }
 
 
