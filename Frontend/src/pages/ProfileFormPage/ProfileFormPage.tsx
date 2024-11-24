@@ -36,7 +36,7 @@ const ProfileFormContent = () => {
 
     const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
     const [profileData, setProfileData] = useState<ProfileFormData>(emptyProfileFormData);
-    const [profileErrors, setProfileErrors] = useState<ProfileFormData>(emptyProfileFormData);
+    // const [profileErrors, setProfileErrors] = useState<ProfileFormData>(emptyProfileFormData);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
     const [coverLetterDeleteIndex, setCoverLetterDeleteIndex] = useState<number | null>(null);
     const [faqDeleteIndex, setFaqDeleteIndex] = useState<number | null>(null);
@@ -161,19 +161,19 @@ const ProfileFormContent = () => {
                             <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
                             <input type="text" placeholder='John Doe' name='name' value={profileData.profile?.name || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.profile.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.name}</div>}
+                            {/* {profileErrors.profile.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.name}</div>} */}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Type</div>
                             <input type="text" placeholder='Professional' name='type' value={profileData.profile?.type || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.profile.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.type}</div>}
+                            {/* {profileErrors.profile.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.type}</div>} */}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Stack</div>
                             <input type="text" placeholder='MERN' name='stack' value={profileData.profile?.stack || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                            {profileErrors.profile.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.stack}</div>}
+                            {/* {profileErrors.profile.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.profile.stack}</div>} */}
                         </div>
                     </div>
 
@@ -214,7 +214,7 @@ const ProfileFormContent = () => {
                                                         data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
                                                         onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)}
                                                     />
-                                                    {(profileErrors.coverLetters && profileErrors.coverLetters[cInd]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[cInd].description}</div>}
+                                                    {/* {(profileErrors.coverLetters && profileErrors.coverLetters[cInd]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[cInd].description}</div>} */}
                                                 </div>
                                             })
                                         }
@@ -259,13 +259,13 @@ const ProfileFormContent = () => {
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
                                                         <input type="text" placeholder='John Doe' name='question' value={(profileData.faqs && profileData.faqs[fInd].question) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                        {(profileErrors.faqs && profileErrors.faqs[fInd]?.question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].question}</div>}
+                                                        {/* {(profileErrors.faqs && profileErrors.faqs[fInd]?.question) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].question}</div>} */}
                                                     </div>
                                                     <div className='col-span-3'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
                                                         <input type="text" placeholder='John Doe' name='answer' value={(profileData.faqs && profileData.faqs[fInd].answer) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                        {(profileErrors.faqs && profileErrors.faqs[fInd]?.answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].answer}</div>}
+                                                        {/* {(profileErrors.faqs && profileErrors.faqs[fInd]?.answer) && <div className='text-red-500 text-sm mt-1'>{profileErrors.faqs[fInd].answer}</div>} */}
                                                     </div>
                                                 </div>
                                             </div>
