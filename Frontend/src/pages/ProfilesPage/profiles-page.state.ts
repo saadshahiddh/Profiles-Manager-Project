@@ -24,7 +24,7 @@ const profilesSlice = createSlice({
             state.profileDetails = action.payload;
         })
         builder.addCase(deleteProfileThunk.fulfilled, (state: any, action) => {
-            state.profileDetails = state.profileDetails.filter((x: ProfileDetail) => x.profile._id != action.meta.arg);
+            state.profileDetails = state.profileDetails.filter((x: ProfileDetail) => x._id != action.meta.arg);
         })
     }
 });

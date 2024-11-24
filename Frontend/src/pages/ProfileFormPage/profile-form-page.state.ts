@@ -1,6 +1,6 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProfileDetailApi, saveProfileDetailApi } from "../../apis/profile.apis";
-import { Profile, ProfileDetail } from "../../types/profile.types";
+import { getProfileFormDataApi, saveProfileFormDataApi } from "../../apis/profile.apis";
+import { Profile, ProfileFormData } from "../../types/profile.types";
 import { deleteCoverLetterApi } from "../../apis/cover-letter.apis";
 import { CoverLetter } from "../../types/cover-letter.types";
 import { Faq } from "../../types/faq.types";
@@ -11,8 +11,8 @@ import { deleteFaqApi } from "../../apis/faq.apis";
 /**************************************************
  * APIs
  */
-const getProfileDetailThunk = createAsyncThunk<ProfileDetail, Profile['_id']>("profile/get-detail", getProfileDetailApi);
-const saveProfileDetailThunk = createAsyncThunk<ProfileDetail, ProfileDetail>("profile/save-detail", saveProfileDetailApi);
+const getProfileFormDataThunk = createAsyncThunk<ProfileFormData, Profile['_id']>("profile/get-form-data", getProfileFormDataApi);
+const saveProfileFormDataThunk = createAsyncThunk<ProfileFormData, ProfileFormData>("profile/save-form-data", saveProfileFormDataApi);
 const deleteCoverLetterThunk = createAsyncThunk<boolean, CoverLetter['_id']>("cover-letter/delete", deleteCoverLetterApi);
 const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", deleteFaqApi);
 
@@ -23,21 +23,21 @@ const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", delet
  */
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
-    initialState: { profileDetail: {} as ProfileDetail },
+    initialState: { profileFormData: {} as ProfileFormData },
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(getProfileDetailThunk.fulfilled, (state, action) => {
-                state.profileDetail = action.payload;
+            .addCase(getProfileFormDataThunk.fulfilled, (state, action) => {
+                state.profileFormData = action.payload;
             })
-            .addCase(saveProfileDetailThunk.fulfilled, (state, action) => {
-                state.profileDetail = action.payload;
+            .addCase(saveProfileFormDataThunk.fulfilled, (state, action) => {
+                state.profileFormData = action.payload;
             })
             .addCase(deleteCoverLetterThunk.fulfilled, (state: any, action) => {
-                state.profileDetail.coverLetters = (state.profileDetail.coverLetters || []).filter((x: any) => x._id != action.meta.arg);
+                state.profileFormData.coverLetters = (state.profileFormData.coverLetters || []).filter((x: any) => x._id != action.meta.arg);
             })
             .addCase(deleteFaqThunk.fulfilled, (state: any, action) => {
-                state.profileDetail.faqs = (state.profileDetail.faqs || []).filter((x: any) => x._id != action.meta.arg);
+                state.profileFormData.faqs = (state.profileFormData.faqs || []).filter((x: any) => x._id != action.meta.arg);
             })
     }
 });
@@ -54,8 +54,8 @@ export type ProfileFormRootState = ReturnType<typeof profileFormStore.getState>;
 export type ProfileFormDispatch = typeof profileFormStore.dispatch;
 
 export {
-    getProfileDetailThunk,
-    saveProfileDetailThunk,
+    getProfileFormDataThunk,
+    saveProfileFormDataThunk,
     deleteCoverLetterThunk,
     profileFormStore,
     deleteFaqThunk,

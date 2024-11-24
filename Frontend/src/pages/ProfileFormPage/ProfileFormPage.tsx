@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Profile, ProfileDetail } from '../../types/profile.types'
+import { Profile, ProfileFormData } from '../../types/profile.types'
 import { CoverLetter } from '../../types/cover-letter.types';
 import { Faq } from '../../types/faq.types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
+import { deleteCoverLetterThunk, deleteFaqThunk, getProfileFormDataThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileFormDataThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
@@ -31,30 +31,33 @@ const ProfileFormContent = () => {
     const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
 
-    const { profileDetail } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
+    const { profileFormData } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
     const dispatch: ProfileFormDispatch = useDispatch();
 
-    const emptyProfileDetail: ProfileDetail = { profile: {}, coverLetters: [], faqs: [] };
-    const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
-    const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
+    const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
+    const [profileData, setProfileData] = useState<ProfileFormData>(emptyProfileFormData);
+    const [profileErrors, setProfileErrors] = useState<ProfileFormData>(emptyProfileFormData);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
     const [coverLetterDeleteIndex, setCoverLetterDeleteIndex] = useState<number | null>(null);
     const [faqDeleteIndex, setFaqDeleteIndex] = useState<number | null>(null);
 
     if (profileId) {
-        useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
+        useEffect(() => { dispatch(getProfileFormDataThunk(profileId)) }, [dispatch, profileId])
     }
     useEffect(() => {
-        if (profileId && profileDetail) {
-            setProfileData({ ...emptyProfileDetail, ...profileDetail })
+        if (profileId && profileFormData) {
+            setProfileData({ ...emptyProfileFormData, ...profileFormData })
         }
-    }, [profileDetail]);
+    }, [profileFormData]);
 
 
 
     /**************************************************
     * Functions
     */
+    function goBack() {
+        navigate(-1);
+    }
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
         const profile = { ...profileData.profile || {} };
         if (name == 'name' || name == 'stack' || name == 'type') { // keyof Profile)[]
@@ -123,8 +126,8 @@ const ProfileFormContent = () => {
     }
 
     async function saveProfileData() {
-        await dispatch(saveProfileDetailThunk(profileData));
-        navigate('/profiles');
+        await dispatch(saveProfileFormDataThunk(profileData));
+        goBack();
     }
 
 
@@ -138,7 +141,7 @@ const ProfileFormContent = () => {
             {/* Header */}
             <div className='w-full flex items-center justify-between'>
                 <div className='flex flex-row gap-2'>
-                    <button className='border-2 rounded-full p-2' onClick={() => navigate(-1)}>
+                    <button className='border-2 rounded-full p-2' onClick={() => goBack()}>
                         <FaArrowLeft />
                     </button>
                     <div className='text-3xl font-bold'>Profile Form</div>

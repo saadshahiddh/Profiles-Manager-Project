@@ -2,6 +2,7 @@ const { CoverLetter, Faq, Profile } = require("../database");
 const { StatusCodes } = require("http-status-codes");
 const { generateApiResponse, formatMongooseData } = require("../services/utilities");
 const { ModelReferences, PopulateReferences } = require("../utils/database-reference");
+const { getProfileFormDataObj } = require("../model-services/profile");
 
 
 
@@ -167,16 +168,10 @@ module.exports = {
                 },
             ]);
 
-            const allProfileDetailsFormatted = formatMongooseData(allProfileDetails).map((profileDetail) => {
-                const { _id, name, stack, type, createdAt } = profileDetail;
-                profileDetail['profile'] = { _id, name, stack, type, createdAt };
-                return profileDetail;
-            })
-
             return generateApiResponse(
                 res, StatusCodes.OK, true,
                 "All Profiles fetched successfully!",
-                { profileDetails: allProfileDetailsFormatted }
+                { profileDetails: allProfileDetails }
             );
         } catch (error) {
             return generateApiResponse(
@@ -190,31 +185,24 @@ module.exports = {
 
 
     /**
-    * Get profile detail
+    * Get profile form data
     */
-    async getProfileDetail(req, res) {
+    async getProfileFormData(req, res) {
         try {
             const profileId = req.params.profileId;
 
-            let profileDetail = {};
-            const foundProfile = await Profile.findById(profileId);
-            const isFound = !!foundProfile;
-
-            if (isFound) {
-                profileDetail['profile'] = foundProfile;
-                profileDetail['coverLetters'] = await CoverLetter.find({ profileId });
-                profileDetail['faqs'] = await Faq.find({ profileId });
-            }
+            const profileFormData = await getProfileFormDataObj(profileId);
+            const isFound = !!profileFormData;
 
             return generateApiResponse(
                 res, (isFound ? StatusCodes.OK : StatusCodes.NOT_FOUND), isFound,
-                (isFound ? "Profile fetched successfully!" : "Profile not found!"),
-                { profileDetail }
+                (isFound ? "Profile form data fetched successfully!" : "Profile not found!"),
+                { profileFormData }
             );
         } catch (error) {
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
-                "Error occurred in getting Profile!",
+                "Error occurred in getting Profile form data!",
                 { error }
             );
         }
@@ -223,9 +211,9 @@ module.exports = {
 
 
     /**
-     * Save profile detail
+     * Save profile form data
      */
-    async saveProfileDetail(req, res) {
+    async saveProfileFormData(req, res) {
         try {
             const { profile, faqs, coverLetters } = req.body;
 
@@ -266,20 +254,16 @@ module.exports = {
                 }));
             };
 
-            let profileDetail = {};
-            profileDetail['profile'] = await Profile.findById(profileId);
-            profileDetail['coverLetters'] = await CoverLetter.find({ profileId });
-            profileDetail['faqs'] = await Faq.find({ profileId });
-
+            const profileFormData = await getProfileFormDataObj(profileId);
             return generateApiResponse(
                 res, StatusCodes.OK, true,
-                "Profile detail saved successfully!",
-                { profileDetail, profileAction }
+                "Profile form data saved successfully!",
+                { profileFormData, profileAction }
             );
         } catch (error) {
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
-                "Error occurred in saving Profile detail!",
+                "Error occurred in saving Profile form data!",
                 { error }
             );
         }

@@ -1,5 +1,5 @@
 import { BackendApiResponse } from "../types/global.types";
-import { Profile, ProfileDetail } from "../types/profile.types";
+import { Profile, ProfileDetail, ProfileFormData } from "../types/profile.types";
 import axiosInstance from "../utilities/axios-instance";
 import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
 
@@ -110,14 +110,14 @@ export async function getAllProfileDetailsApi(): Promise<ProfileDetail[]> {
 
 
 /**
- * Get profile detail api
+ * Get profile formData api
  * @param id 
  * @returns 
  */
-export async function getProfileDetailApi(_id: Profile['_id']): Promise<ProfileDetail> {
+export async function getProfileFormDataApi(_id: Profile['_id']): Promise<ProfileFormData> {
     try {
-        const resp: (BackendApiResponse & { profileDetail: ProfileDetail }) = (await axiosInstance.get(`profile/get-detail/${_id}`)).data;
-        return resp.profileDetail;
+        const resp: (BackendApiResponse & { profileFormData: ProfileFormData }) = (await axiosInstance.get(`profile/get-form-data/${_id}`)).data;
+        return resp.profileFormData;
     } catch (err: any) {
         const error: BackendApiResponse = err.response.data;
         showApiErrorToast(error.message);
@@ -128,15 +128,15 @@ export async function getProfileDetailApi(_id: Profile['_id']): Promise<ProfileD
 
 
 /**
- * Save profile detail api
+ * Save profile formData api
  * @param id 
  * @returns 
  */
-export async function saveProfileDetailApi(profileDetail: ProfileDetail): Promise<ProfileDetail> {
+export async function saveProfileFormDataApi(profileFormData: ProfileFormData): Promise<ProfileFormData> {
     try {
-        const resp: (BackendApiResponse & { profileDetail: ProfileDetail }) = (await axiosInstance.patch('profile/save-detail', profileDetail)).data;
+        const resp: (BackendApiResponse & { profileFormData: ProfileFormData }) = (await axiosInstance.patch('profile/save-form-data', profileFormData)).data;
         showApiSuccessToast(resp.message);
-        return resp.profileDetail;
+        return resp.profileFormData;
     } catch (err: any) {
         const error: BackendApiResponse = err.response.data;
         showApiErrorToast(error.message);

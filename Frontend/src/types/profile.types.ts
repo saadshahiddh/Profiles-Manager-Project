@@ -10,7 +10,12 @@ export interface Profile {
     updatedAt?: Date,
 }
 
-export interface ProfileDetail {
+export interface ProfileDetail extends Profile {
+    coverLetters: CoverLetter[],
+    faqs: Faq[],
+}
+
+export interface ProfileFormData {
     profile: Profile,
     coverLetters: CoverLetter[],
     faqs: Faq[],

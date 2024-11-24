@@ -88,16 +88,16 @@ const ProfilesContent = () => {
                     /**
                      * Profiles Listing
                      */
-                    profileDetailsList.map(({ profile, faqs, coverLetters }, pInd) => {
+                    profileDetailsList.map(({ _id, name, stack, type, createdAt, faqs, coverLetters }, pInd) => {
                         return <div key={pInd} className='shadow border p-2'>
 
                             {/* Buttons */}
                             <div className='w-full flex items-center justify-end'>
                                 <div>
-                                    <button className='bg-blue-500 text-white p-1 rounded mx-1' onClick={() => editProfile(profile._id)}>
+                                    <button className='bg-blue-500 text-white p-1 rounded mx-1' onClick={() => editProfile(_id)}>
                                         <FaPencil />
                                     </button>
-                                    <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteProfile(profile._id)}>
+                                    <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteProfile(_id)}>
                                         <FaTrash />
                                     </button>
                                 </div>
@@ -106,13 +106,13 @@ const ProfilesContent = () => {
                             {/* Profile */}
                             <div className='w-full grid grid-cols-3 gap-x-1 gap-y-2'>
                                 <div className='col-span-1 text-gray-600 font-medium text-sm'>Name:</div>
-                                <div className='col-span-2 font-semibold'>{profile.name}</div>
+                                <div className='col-span-2 font-semibold'>{name}</div>
                                 <div className='col-span-1 text-gray-600 font-medium text-sm'>Type:</div>
-                                <div className='col-span-2 font-semibold'>{profile.type}</div>
+                                <div className='col-span-2 font-semibold'>{type}</div>
                                 <div className='col-span-1 text-gray-600 font-medium text-sm'>Stack:</div>
-                                <div className='col-span-2 font-semibold'>{profile.stack}</div>
+                                <div className='col-span-2 font-semibold'>{stack}</div>
                                 <div className='col-span-1 text-gray-600 font-medium text-sm'>Created:</div>
-                                <div className='col-span-2 font-semibold'>{formatDateToMediumDate(profile.createdAt)}</div>
+                                <div className='col-span-2 font-semibold'>{formatDateToMediumDate(createdAt)}</div>
                             </div>
 
                             <hr className='my-3 border-2' />
@@ -134,7 +134,7 @@ const ProfilesContent = () => {
                                                     }
                                                 </div>
 
-                                                {coverLetters.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(profile._id)}>View More</div>)}
+                                                {coverLetters.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(_id)}>View More</div>)}
                                             </>
                                         ) : (
                                             <div className='text-center text-sm text-gray-500'>No Cover Letters!</div>
@@ -163,7 +163,7 @@ const ProfilesContent = () => {
                                                     </div>
                                                 })
                                             }
-                                            {faqs.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(profile._id)}>View More</div>)}
+                                            {faqs.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(_id)}>View More</div>)}
                                         </>
                                     ) : (
                                         <div className='text-center text-sm text-gray-500'>No FAQs!</div>
