@@ -23,12 +23,19 @@ const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", delet
  */
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
-    initialState: { profileFormData: {} as ProfileFormData },
+    initialState: { profileFormData: {} as ProfileFormData, isLoading: false },
     reducers: {},
     extraReducers: builder => {
         builder
+            .addCase(getProfileFormDataThunk.pending, (state) => {
+                state.isLoading = true;
+            })
             .addCase(getProfileFormDataThunk.fulfilled, (state, action) => {
                 state.profileFormData = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(getProfileFormDataThunk.rejected, (state) => {
+                state.isLoading = false;
             })
             .addCase(saveProfileFormDataThunk.fulfilled, (state, action) => {
                 state.profileFormData = action.payload;

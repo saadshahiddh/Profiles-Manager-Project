@@ -9,6 +9,7 @@ import { deleteCoverLetterThunk, deleteFaqThunk, getProfileFormDataThunk, Profil
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
+import { FaCircleNotch } from 'react-icons/fa6';
 
 
 const ProfileFormPage = () => {
@@ -31,7 +32,7 @@ const ProfileFormContent = () => {
     const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
 
-    const { profileFormData } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
+    const { profileFormData, isLoading } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
     const dispatch: ProfileFormDispatch = useDispatch();
 
     const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
@@ -145,6 +146,9 @@ const ProfileFormContent = () => {
                         <FaArrowLeft />
                     </button>
                     <div className='text-3xl font-bold'>Profile Form</div>
+                </div>
+                <div>
+                    {isLoading && <FaCircleNotch className='spinner-icon' size={50} />}
                 </div>
                 <button onClick={saveProfileData} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
                     Save
