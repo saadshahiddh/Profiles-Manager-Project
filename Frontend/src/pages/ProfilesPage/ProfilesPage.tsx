@@ -5,6 +5,7 @@ import { Profile, ProfileDetail } from '../../types/profile.types'
 import { FaTrash } from 'react-icons/fa'
 import { FaPencil } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
+import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog'
 
 const ProfilesPage = () => {
     return (
@@ -20,6 +21,7 @@ const ProfilesContent = () => {
     const { profileDetails } = useSelector((state: ProfilesRootState) => state.profiles_page_state);
     const dispatch: ProfilesDispatch = useDispatch();
 
+    const [profileDeleteId, setProfileDeleteId] = useState<Profile['_id']>('');
     const [profileDetailsList, setProfileDetailsList] = useState<ProfileDetail[]>([]);
 
     useEffect(() => { dispatch(getAllProfileDetailsThunk()) }, [dispatch]);
@@ -35,8 +37,12 @@ const ProfilesContent = () => {
     function editProfile(_id: Profile['_id']) {
         navigate(`/profile-form?profileId=${_id}`);
     }
-    async function deleteProfile(_id: Profile['_id']) {
-        await dispatch(deleteProfileThunk(_id));
+    function deleteProfile(_id: Profile['_id']) {
+        setProfileDeleteId(_id);
+    }
+    async function onDeleteProfile() {
+        await dispatch(deleteProfileThunk(profileDeleteId));
+        setProfileDeleteId('');
     }
 
     return <>
@@ -109,6 +115,13 @@ const ProfilesContent = () => {
                 )
             }
         </div>
+
+        {/* Extras */}
+        {profileDeleteId &&
+            <ConfirmationDialog title='Delete Profile' onConfirm={onDeleteProfile} onClose={() => setProfileDeleteId('')}>
+                <div>Are you sure want to delete <b>Profile</b>?</div>
+            </ConfirmationDialog>
+        }
     </>
 }
 

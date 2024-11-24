@@ -7,7 +7,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { FaTrash, FaCopy, FaCheck } from 'react-icons/fa';
+import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
+import { FaChevronLeft } from 'react-icons/fa6';
 
 
 const ProfileFormPage = () => {
@@ -34,8 +35,7 @@ const ProfileFormContent = () => {
         useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
     }
     useEffect(() => {
-        if (profileDetail) {
-            // console.log(profileDetail);
+        if (profileId && profileDetail) {
             setProfileData({ ...emptyProfileDetail, ...profileDetail })
         }
     }, [profileDetail]);
@@ -110,7 +110,12 @@ const ProfileFormContent = () => {
     return (
         <>
             <div className='w-full flex items-center justify-between'>
-                <div className='text-3xl font-bold'>Profile Form</div>
+                <div className='flex flex-row gap-2'>
+                    <button className='border-2 rounded-full p-2' onClick={() => navigate(-1)}>
+                        <FaArrowLeft />
+                    </button>
+                    <div className='text-3xl font-bold'>Profile Form</div>
+                </div>
                 <button onClick={saveProfileData} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
                     Save
                 </button>

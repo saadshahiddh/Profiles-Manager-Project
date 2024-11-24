@@ -68,6 +68,9 @@ module.exports = {
             const profileId = req.params.profileId;
 
             const deletedProfile = await Profile.findByIdAndDelete(profileId);
+            await CoverLetter.deleteMany({ profileId });
+            await Faq.deleteMany({ profileId });
+
             const isDeleted = !!deletedProfile;
             return generateApiResponse(
                 res, (isDeleted ? StatusCodes.OK : StatusCodes.NOT_FOUND), isDeleted,
