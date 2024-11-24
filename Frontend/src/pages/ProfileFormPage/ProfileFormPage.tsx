@@ -9,6 +9,7 @@ import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileF
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
 import { FaChevronLeft } from 'react-icons/fa6';
+import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 
 
 const ProfileFormPage = () => {
@@ -30,6 +31,9 @@ const ProfileFormContent = () => {
     const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
     const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
+
+    const [coverLetterDeleteIndex, setCoverLetterDeleteIndex] = useState<number | null>(null);
+    const [faqDeleteIndex, setFaqDeleteIndex] = useState<number | null>(null);
 
     if (profileId) {
         useEffect(() => { dispatch(getProfileDetailThunk(profileId)) }, [dispatch, profileId])
@@ -82,23 +86,29 @@ const ProfileFormContent = () => {
         setTimeout(() => setCoverLetterCopiedIndex(null), 1000);
     }
 
-    async function deleteCoverLetter(index: number) {
-        const coverLetter = profileData.coverLetters[index];
-        if (coverLetter._id) {
-            await dispatch(deleteCoverLetterThunk(coverLetter._id));
-        } else {
-            const coverLetters = profileData.coverLetters.filter((_, i) => i != index);
-            setProfileData({ ...profileData, coverLetters });
+    async function deleteCoverLetter() {
+        if (coverLetterDeleteIndex != null) {
+            const coverLetter = profileData.coverLetters[coverLetterDeleteIndex];
+            if (coverLetter._id) {
+                await dispatch(deleteCoverLetterThunk(coverLetter._id));
+            } else {
+                const coverLetters = profileData.coverLetters.filter((_, i) => i != coverLetterDeleteIndex);
+                setProfileData({ ...profileData, coverLetters });
+            };
+            setCoverLetterDeleteIndex(null);
         }
     }
 
-    async function deleteFaq(index: number) {
-        const faq = profileData.faqs[index];
-        if (faq._id) {
-            await dispatch(deleteFaqThunk(faq._id));
-        } else {
-            const faqs = profileData.faqs.filter((_, i) => i != index);
-            setProfileData({ ...profileData, faqs });
+    async function deleteFaq() {
+        if (faqDeleteIndex != null) {
+            const faq = profileData.faqs[faqDeleteIndex];
+            if (faq._id) {
+                await dispatch(deleteFaqThunk(faq._id));
+            } else {
+                const faqs = profileData.faqs.filter((_, i) => i != faqDeleteIndex);
+                setProfileData({ ...profileData, faqs });
+            };
+            setFaqDeleteIndex(null);
         }
     }
 
@@ -167,7 +177,7 @@ const ProfileFormContent = () => {
                                                             <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == cInd ? 'bg-blue-500' : 'bg-gray-500'}`} onClick={() => copyCoverLetter(cInd)}>
                                                                 {coverLetterCopiedIndex == cInd ? <FaCheck /> : <FaCopy />}
                                                             </button>
-                                                            <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteCoverLetter(cInd)}>
+                                                            <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => setCoverLetterDeleteIndex(cInd)}>
                                                                 <FaTrash />
                                                             </button>
                                                         </div>
@@ -216,7 +226,7 @@ const ProfileFormContent = () => {
                                             return <div key={fInd} className='border-b pb-2 mb-3'>
                                                 <div className='w-full flex items-center justify-between'>
                                                     <div></div>
-                                                    <button className='bg-red-500 text-white px-2 rounded' onClick={() => deleteFaq(fInd)}>X</button>
+                                                    <button className='bg-red-500 text-white px-2 rounded' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
                                                 </div>
                                                 <div className='grid grid-cols-4 gap-1'>
                                                     <div className='col-span-1'>
@@ -250,6 +260,18 @@ const ProfileFormContent = () => {
                 </div>
 
             </div>
+
+            {(faqDeleteIndex != null) &&
+                <ConfirmationDialog title='Delete FAQ' onConfirm={deleteFaq} onClose={() => setFaqDeleteIndex(null)}>
+                    <div>Are you sure want to delete <b>FAQ</b>?</div>
+                </ConfirmationDialog>
+            }
+
+            {(coverLetterDeleteIndex != null) &&
+                <ConfirmationDialog title='Delete Cover Letter' onConfirm={deleteCoverLetter} onClose={() => setCoverLetterDeleteIndex(null)}>
+                    <div>Are you sure want to delete <b>Cover Letter</b>?</div>
+                </ConfirmationDialog>
+            }
         </>
     )
 }

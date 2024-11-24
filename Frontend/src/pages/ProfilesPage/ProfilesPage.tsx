@@ -116,7 +116,6 @@ const ProfilesContent = () => {
             }
         </div>
 
-        {/* Extras */}
         {profileDeleteId &&
             <ConfirmationDialog title='Delete Profile' onConfirm={onDeleteProfile} onClose={() => setProfileDeleteId('')}>
                 <div>Are you sure want to delete <b>Profile</b>?</div>
