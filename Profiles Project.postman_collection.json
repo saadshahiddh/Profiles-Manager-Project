@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d3612753-0f74-4083-b853-675aca1bfdcb",
+		"_postman_id": "09611460-fd4b-4efb-828f-d1ea60b58cd4",
 		"name": "Profiles Project",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21998948"
+		"_exporter_id": "39960832"
 	},
 	"item": [
 		{
@@ -368,18 +368,54 @@
 					"response": []
 				},
 				{
-					"name": "Get Detail",
+					"name": "Get All",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{profileRoute}}/get-detail/:profileId",
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-all",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{profileRoute}}",
-								"get-detail",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-all-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-all-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Form Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-form-data/:profileId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-form-data",
 								":profileId"
 							],
 							"variable": [
@@ -393,18 +429,27 @@
 					"response": []
 				},
 				{
-					"name": "Get All",
+					"name": "Save Form Data",
 					"request": {
-						"method": "GET",
+						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profile\": {\r\n        \"_id\": \"{{profileId}}\",\r\n        \"name\": \"Profile 2\",\r\n        \"stack\": \"MEAN\",\r\n        \"type\": \"New\"\r\n    },\r\n    \"coverLetters\": [\r\n        {\r\n            \"_id\": \"{{coverLetterId}}\",\r\n            \"description\": \"This is description.\"\r\n        }\r\n    ],\r\n    \"faqs\": [\r\n        {\r\n            \"_id\": \"{{faqId}}\",\r\n            \"answer\": \"This is updated answer against question.\",\r\n            \"question\": \"This is updated question\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/{{profileRoute}}/get-all",
+							"raw": "{{baseUrl}}/{{profileRoute}}/save-form-data",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{profileRoute}}",
-								"get-all"
+								"save-form-data"
 							]
 						}
 					},
