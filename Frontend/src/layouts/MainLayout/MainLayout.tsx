@@ -2,6 +2,10 @@ import { Outlet } from 'react-router-dom'
 
 const MainLayout = () => {
     return (
+
+        /**************************************************
+        * Template
+        */
         <>
             <div className='bg-gray-700 text-white h-10 flex items-center justify-center'>
                 <div>Main Layout</div>

@@ -143,8 +143,8 @@ module.exports = {
             const allProfiles = formatMongooseData(await Profile.find().sort({ createdAt: -1 }));
 
             const allProfileDetails = await Promise.all(allProfiles.map(async (profile) => {
-                const coverLetters = await CoverLetter.find({ profileId: profile?._id });
-                const faqs = await Faq.find({ profileId: profile?._id });
+                const coverLetters = await CoverLetter.find({ profileId: profile?._id}).limit(3);
+                const faqs = await Faq.find({ profileId: profile?._id}).limit(3);
                 return { profile, coverLetters, faqs }
             }));
 
@@ -252,8 +252,6 @@ module.exports = {
                 { profileDetail, profileAction }
             );
         } catch (error) {
-            console.log(error);
-
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
                 "Error occurred in saving Profile detail!",

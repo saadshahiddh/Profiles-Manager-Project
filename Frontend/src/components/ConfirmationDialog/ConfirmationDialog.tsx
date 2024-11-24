@@ -8,12 +8,18 @@ interface ConfirmationDialogProps {
     onClose: () => void;
 }
 
+
+
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     title,
     children,
     onConfirm,
     onClose,
 }) => {
+
+    /**************************************************
+     * Template
+     */
     return (
         <div className="confirmation-dialog-overlay">
             <div className="confirmation-dialog">

@@ -1,10 +1,20 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deleteProfileApi, getAllProfileDetailsApi, getAllProfilesApi } from "../../apis/profile.apis";
+import { deleteProfileApi, getAllProfileDetailsApi } from "../../apis/profile.apis";
 import { Profile, ProfileDetail } from "../../types/profile.types";
 
+
+
+/**************************************************
+ * APIs
+ */
 const deleteProfileThunk = createAsyncThunk<boolean, Profile['_id']>('profile/delete', deleteProfileApi);
 const getAllProfileDetailsThunk = createAsyncThunk<ProfileDetail[]>('profile/get-all', getAllProfileDetailsApi);
 
+
+
+/**************************************************
+ * Slice
+ */
 const profilesSlice = createSlice({
     name: 'profiles_page_state',
     initialState: { profileDetails: [] as ProfileDetail[] },
@@ -19,6 +29,11 @@ const profilesSlice = createSlice({
     }
 });
 
+
+
+/**************************************************
+ * Others
+ */
 const profilesReducer = profilesSlice.reducer;
 const profilesStore = configureStore({ reducer: { profiles_page_state: profilesReducer } });
 

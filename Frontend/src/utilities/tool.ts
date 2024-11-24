@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import { API_BASE_URL } from "./environment";
 
 
 /**
@@ -17,16 +16,6 @@ export function showApiSuccessToast(message: string) {
  */
 export function showApiErrorToast(message: string) {
     toast.error(message, {});
-}
-
-
-/**
- * Get file path
- * @param fileName 
- * @returns 
- */
-export function getFilePath(fileName: string | undefined) {
-    return `${API_BASE_URL}file/${fileName}`;
 }
 
 

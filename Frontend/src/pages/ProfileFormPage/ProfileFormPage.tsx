@@ -8,7 +8,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteCoverLetterThunk, deleteFaqThunk, getProfileDetailThunk, ProfileFormDispatch, ProfileFormRootState, profileFormStore, saveProfileDetailThunk } from './profile-form-page.state';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
-import { FaChevronLeft } from 'react-icons/fa6';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 
 
@@ -19,7 +18,15 @@ const ProfileFormPage = () => {
 }
 
 
+
+/**
+ * Profile Form Content
+ * @returns 
+ */
 const ProfileFormContent = () => {
+    /**************************************************
+     * Hookes & Others
+     */
     const location = useLocation();
     const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
@@ -31,7 +38,6 @@ const ProfileFormContent = () => {
     const [profileData, setProfileData] = useState<ProfileDetail>(emptyProfileDetail);
     const [profileErrors, setProfileErrors] = useState<ProfileDetail>(emptyProfileDetail);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
-
     const [coverLetterDeleteIndex, setCoverLetterDeleteIndex] = useState<number | null>(null);
     const [faqDeleteIndex, setFaqDeleteIndex] = useState<number | null>(null);
 
@@ -44,6 +50,11 @@ const ProfileFormContent = () => {
         }
     }, [profileDetail]);
 
+
+
+    /**************************************************
+    * Functions
+    */
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
         const profile = { ...profileData.profile || {} };
         if (name == 'name' || name == 'stack' || name == 'type') { // keyof Profile)[]
@@ -71,7 +82,6 @@ const ProfileFormContent = () => {
         const coverLetters = profileData.coverLetters ? [...profileData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
         setProfileData({ ...profileData, coverLetters });
     }
-
 
     function addFaq() {
         const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
@@ -117,8 +127,15 @@ const ProfileFormContent = () => {
         navigate('/profiles');
     }
 
+
+
+    /**************************************************
+    * Template
+    */
     return (
         <>
+
+            {/* Header */}
             <div className='w-full flex items-center justify-between'>
                 <div className='flex flex-row gap-2'>
                     <button className='border-2 rounded-full p-2' onClick={() => navigate(-1)}>
@@ -130,6 +147,9 @@ const ProfileFormContent = () => {
                     Save
                 </button>
             </div>
+
+
+            {/* Profile */}
             <div className='grid gap-5 grid-cols-1 mt-5'>
                 <div className='shadow border p-2'>
 
@@ -156,6 +176,8 @@ const ProfileFormContent = () => {
 
                     <hr className='my-3 border-2' />
 
+
+                    {/* Cover Letters */}
                     <div className="w-full">
                         <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
                             <div className='text-lg font-semibold'>Cover Letters</div>
@@ -182,13 +204,13 @@ const ProfileFormContent = () => {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    {/* <CKEditor
+                                                    {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
+                                                    <CKEditor
                                                         editor={ClassicEditor}
                                                         data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
                                                         onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)}
-                                                    /> */}
+                                                    />
                                                     {(profileErrors.coverLetters && profileErrors.coverLetters[cInd]?.description) && <div className='text-red-500 text-sm mt-1'>{profileErrors.coverLetters[cInd].description}</div>}
                                                 </div>
                                             })
@@ -208,6 +230,7 @@ const ProfileFormContent = () => {
                     <hr className='my-3 border-2' />
 
 
+                    {/* FAQs */}
                     <div className="w-full">
                         <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
                             <div className='text-lg font-semibold'>FAQs</div>
@@ -261,12 +284,16 @@ const ProfileFormContent = () => {
 
             </div>
 
+
+            {/* FAQ delete Confimation dialog */}
             {(faqDeleteIndex != null) &&
                 <ConfirmationDialog title='Delete FAQ' onConfirm={deleteFaq} onClose={() => setFaqDeleteIndex(null)}>
                     <div>Are you sure want to delete <b>FAQ</b>?</div>
                 </ConfirmationDialog>
             }
 
+
+            {/* Cover Letter delete Confimation dialog */}
             {(coverLetterDeleteIndex != null) &&
                 <ConfirmationDialog title='Delete Cover Letter' onConfirm={deleteCoverLetter} onClose={() => setCoverLetterDeleteIndex(null)}>
                     <div>Are you sure want to delete <b>Cover Letter</b>?</div>

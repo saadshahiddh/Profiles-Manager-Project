@@ -7,11 +7,20 @@ import { Faq } from "../../types/faq.types";
 import { deleteFaqApi } from "../../apis/faq.apis";
 
 
+
+/**************************************************
+ * APIs
+ */
 const getProfileDetailThunk = createAsyncThunk<ProfileDetail, Profile['_id']>("profile/get-detail", getProfileDetailApi);
 const saveProfileDetailThunk = createAsyncThunk<ProfileDetail, ProfileDetail>("profile/save-detail", saveProfileDetailApi);
 const deleteCoverLetterThunk = createAsyncThunk<boolean, CoverLetter['_id']>("cover-letter/delete", deleteCoverLetterApi);
 const deleteFaqThunk = createAsyncThunk<boolean, Faq['_id']>("faq/delete", deleteFaqApi);
 
+
+
+/**************************************************
+ * Slice
+ */
 const profileFormSlice = createSlice({
     name: 'profile_form_state',
     initialState: { profileDetail: {} as ProfileDetail },
@@ -33,6 +42,11 @@ const profileFormSlice = createSlice({
     }
 });
 
+
+
+/**************************************************
+ * Others
+ */
 const profileFormReducer = profileFormSlice.reducer;
 const profileFormStore = configureStore({ reducer: { profile_form_state: profileFormReducer } });
 
