@@ -17,11 +17,21 @@ const getAllProfileDetailsThunk = createAsyncThunk<ProfileDetail[]>('profile/get
  */
 const profilesSlice = createSlice({
     name: 'profiles_page_state',
-    initialState: { profileDetails: [] as ProfileDetail[] },
+    initialState: {
+        profileDetails: [] as ProfileDetail[],
+        isLoading: false,
+    },
     reducers: {},
     extraReducers: builder => {
+        builder.addCase(getAllProfileDetailsThunk.pending, (state: any) => {
+            state.isLoading = true;
+        })
         builder.addCase(getAllProfileDetailsThunk.fulfilled, (state: any, action) => {
             state.profileDetails = action.payload;
+            state.isLoading = false;
+        })
+        builder.addCase(getAllProfileDetailsThunk.rejected, (state: any) => {
+            state.isLoading = true;
         })
         builder.addCase(deleteProfileThunk.fulfilled, (state: any, action) => {
             state.profileDetails = state.profileDetails.filter((x: ProfileDetail) => x._id != action.meta.arg);
