@@ -74,7 +74,7 @@ const ProfileFormContent = () => {
         setProfileData({ ...profileData, coverLetters });
     }
 
-    function handleFaqInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>, index: number) {
+    function handleFaqInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, index: number) {
         const faqs = [...profileData.faqs || []];
         if (name == 'question' || name == 'answer') {
             faqs[index] = { ...faqs[index], [name]: value };
@@ -96,7 +96,10 @@ const ProfileFormContent = () => {
 
     async function copyCoverLetter(index: number) {
         const coverLetter = profileData.coverLetters[index];
-        navigator.clipboard.writeText(coverLetter.description || '');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = coverLetter.description || '';
+        const textContent = tempDiv.textContent || tempDiv.innerText;
+        await navigator.clipboard.writeText(textContent);
         setCoverLetterCopiedIndex(index);
         setTimeout(() => setCoverLetterCopiedIndex(null), 1000);
     }
@@ -188,7 +191,7 @@ const ProfileFormContent = () => {
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Type</div>
-                            <input type="text" placeholder='Professional' name='type' value={profileData.profile?.type || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='Developer' name='type' value={profileData.profile?.type || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.type}</div>}
                         </div>
@@ -208,14 +211,14 @@ const ProfileFormContent = () => {
                         <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
                             <div className='text-lg font-semibold'>Cover Letters</div>
                             <button onClick={addCoverLetter} className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
-                                Add
+                                Add Cover Letter
                             </button>
                         </div>
 
                         {
                             profileData.coverLetters?.length ?
                                 (
-                                    <div className="w-full grid grid-cols-2 gap-1">
+                                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-1">
                                         {
                                             profileData.coverLetters.map((item, cInd) => {
                                                 return <div key={cInd}>
@@ -230,13 +233,10 @@ const ProfileFormContent = () => {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    {/* <input type="text" placeholder='John Doe' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
-                                                    <CKEditor
-                                                        editor={ClassicEditor}
-                                                        data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
-                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)}
-                                                    />
+                                                    <input type="text" placeholder='I am a MERN stack developer.' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                    <CKEditor editor={ClassicEditor} data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
+                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)} />
                                                 </div>
                                             })
                                         }
@@ -260,7 +260,7 @@ const ProfileFormContent = () => {
                         <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
                             <div className='text-lg font-semibold'>FAQs</div>
                             <button onClick={addFaq} className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
-                                Add
+                                Add FAQ
                             </button>
                         </div>
 
@@ -268,7 +268,7 @@ const ProfileFormContent = () => {
                         {
 
                             profileData.faqs?.length ? (
-                                <div className="w-full">
+                                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {
                                         profileData.faqs.map((item, fInd) => {
                                             return <div key={fInd} className='border-b pb-2 mb-3'>
@@ -276,15 +276,15 @@ const ProfileFormContent = () => {
                                                     <div></div>
                                                     <button className='bg-red-500 text-white px-2 rounded' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
                                                 </div>
-                                                <div className='grid grid-cols-4 gap-1'>
-                                                    <div className='col-span-1'>
+                                                <div className='flex flex-col gap-1'>
+                                                    <div className='w-full'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
-                                                        <input type="text" placeholder='John Doe' name='question' value={(profileData.faqs && profileData.faqs[fInd].question) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        <input type="text" placeholder='What is your experience?' name='question' value={(profileData.faqs && profileData.faqs[fInd].question) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                                                     </div>
-                                                    <div className='col-span-3'>
+                                                    <div className='w-full'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
-                                                        <input type="text" placeholder='John Doe' name='answer' value={(profileData.faqs && profileData.faqs[fInd].answer) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        <textarea rows={3} placeholder='I have 1 year of experience in full stack development.' name='answer' value={(profileData.faqs && profileData.faqs[fInd].answer) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                                                     </div>
                                                 </div>

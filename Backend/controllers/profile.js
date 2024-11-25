@@ -257,7 +257,7 @@ module.exports = {
             const profileFormData = await getProfileFormDataObj(profileId);
             return generateApiResponse(
                 res, StatusCodes.OK, true,
-                "Profile form data saved successfully!",
+                "Profile saved successfully!",
                 { profileFormData, profileAction }
             );
         } catch (error) {

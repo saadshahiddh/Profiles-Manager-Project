@@ -132,7 +132,7 @@ const ProfilesContent = () => {
                                                             {
                                                                 coverLetters.slice(0, 2).map((coverLetter, cInd) => {
                                                                     return <div key={cInd}>
-                                                                        <CKEditor editor={ClassicEditor} data={coverLetter.description || ''}
+                                                                        <CKEditor editor={ClassicEditor} data={coverLetter.description!.length > 140 ? coverLetter.description?.slice(0, coverLetter.description!.lastIndexOf(' ', 140)) + '...' : coverLetter?.description}
                                                                             config={{ toolbar: [] }} onReady={(editor) => { editor.enableReadOnlyMode('my-feature-id') }} />
                                                                     </div>
                                                                 })
