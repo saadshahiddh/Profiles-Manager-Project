@@ -1,0 +1,767 @@
+{
+	"info": {
+		"_postman_id": "09611460-fd4b-4efb-828f-d1ea60b58cd4",
+		"name": "Profiles Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39960832"
+	},
+	"item": [
+		{
+			"name": "Cover Letter",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"This is description.\",\r\n    \"profileId\": \"{{profileId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{coverLetterRoute}}/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{coverLetterRoute}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{coverLetterId}}\",\r\n    \"description\": \"This is updated description.\",\r\n    \"profileId\": \"{{profileId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{coverLetterRoute}}/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{coverLetterRoute}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{coverLetterRoute}}/delete/:coverLetterId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{coverLetterRoute}}",
+								"delete",
+								":coverLetterId"
+							],
+							"variable": [
+								{
+									"key": "coverLetterId",
+									"value": "{{coverLetterId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{coverLetterRoute}}/get/:coverLetterId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{coverLetterRoute}}",
+								"get",
+								":coverLetterId"
+							],
+							"variable": [
+								{
+									"key": "coverLetterId",
+									"value": "{{coverLetterId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{coverLetterRoute}}/get-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{coverLetterRoute}}",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FAQ",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answer\": \"This is answer against question.\",\r\n    \"question\": \"This is question\",\r\n    \"profileId\": \"{{profileId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{faqRoute}}/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{faqRoute}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{faqId}}\",\r\n    \"answer\": \"This is updated answer against question.\",\r\n    \"question\": \"This is updated question\",\r\n    \"profileId\": \"{{profileId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{faqRoute}}/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{faqRoute}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{faqRoute}}/delete/:faqId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{faqRoute}}",
+								"delete",
+								":faqId"
+							],
+							"variable": [
+								{
+									"key": "faqId",
+									"value": "{{faqId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{faqRoute}}/get/:faqId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{faqRoute}}",
+								"get",
+								":faqId"
+							],
+							"variable": [
+								{
+									"key": "faqId",
+									"value": "{{faqId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{faqRoute}}/get-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{faqRoute}}",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Profile 1\",\r\n    \"stack\": \"MERN\",\r\n    \"type\": \"Test\",\r\n    \"userId\": \"{{userId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{profileId}}\",\r\n    \"name\": \"Profile 2\",\r\n    \"stack\": \"MEAN\",\r\n    \"type\": \"New\",\r\n    \"userId\": \"{{userId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/delete/:profileId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"delete",
+								":profileId"
+							],
+							"variable": [
+								{
+									"key": "profileId",
+									"value": "{{profileId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get/:profileId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get",
+								":profileId"
+							],
+							"variable": [
+								{
+									"key": "profileId",
+									"value": "{{profileId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-all-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-all-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Form Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/get-form-data/:profileId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"get-form-data",
+								":profileId"
+							],
+							"variable": [
+								{
+									"key": "profileId",
+									"value": "{{profileId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Form Data",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profile\": {\r\n        \"_id\": \"{{profileId}}\",\r\n        \"name\": \"Profile 2\",\r\n        \"stack\": \"MEAN\",\r\n        \"type\": \"New\",\r\n        \"userId\": \"{{userId}}\"\r\n    },\r\n    \"coverLetters\": [\r\n        {\r\n            \"_id\": \"{{coverLetterId}}\",\r\n            \"description\": \"This is description.\"\r\n        }\r\n    ],\r\n    \"faqs\": [\r\n        {\r\n            \"_id\": \"{{faqId}}\",\r\n            \"answer\": \"This is updated answer against question.\",\r\n            \"question\": \"This is updated question\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{profileRoute}}/save-form-data",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{profileRoute}}",
+								"save-form-data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testuser@gmail.com\",\r\n    \"name\": \"Test User\",\r\n    \"password\": \"123456\",\r\n    \"photo\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{userId}}\",\r\n    \"email\": \"testuserupdated@gmail.com\",\r\n    \"name\": \"Test User Updated\",\r\n    // \"password\": \"123456\",\r\n    \"photo\": \"file-123456.jpg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Photo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/saads/Downloads/Media/pexels-jonaskakaroto-736230.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/update-photo/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"update-photo",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/delete/:userId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"delete",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/get/:userId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"get",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/get-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testuser@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{userId}}\",\r\n    \"oldPassword\": \"123456\",\r\n    \"newPassword\": \"456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"{{userId}}\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{userRoute}}/update-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{userRoute}}",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "profileRoute",
+			"value": "profile",
+			"type": "string"
+		},
+		{
+			"key": "profileId",
+			"value": "673f579752570362eaf4efd3",
+			"type": "string"
+		},
+		{
+			"key": "coverLetterRoute",
+			"value": "cover-letter",
+			"type": "string"
+		},
+		{
+			"key": "coverLetterId",
+			"value": "6740396adbcd41e5055967b3",
+			"type": "string"
+		},
+		{
+			"key": "faqRoute",
+			"value": "faq",
+			"type": "string"
+		},
+		{
+			"key": "faqId",
+			"value": "674038f7dbcd41e5055967a8",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "67448e3a971dbcc755dbdd78",
+			"type": "string"
+		},
+		{
+			"key": "userRoute",
+			"value": "user",
+			"type": "string"
+		}
+	]
+}

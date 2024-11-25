@@ -9,6 +9,7 @@ const { getEnvVariable } = require('./services/utilities');
 const Faq = require("./models/faq");
 const CoverLetter = require("./models/cover-letter");
 const Profile = require("./models/profile");
+const User = require("./models/user");
 
 
 
@@ -37,6 +38,7 @@ module.exports = {
     Faq,
     CoverLetter,
     Profile,
+    User,
 }
 
 

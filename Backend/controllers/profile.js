@@ -15,9 +15,9 @@ module.exports = {
      */
     async createProfile(req, res) {
         try {
-            const { name, stack, type } = req.body;
+            const { name, stack, type, userId } = req.body;
 
-            const createdProfile = await Profile.create({ name, stack, type });
+            const createdProfile = await Profile.create({ name, stack, type, userId });
             return generateApiResponse(
                 res, StatusCodes.CREATED, true,
                 "Profile created successfully!",
@@ -39,10 +39,10 @@ module.exports = {
      */
     async updateProfile(req, res) {
         try {
-            const { _id, name, stack, type } = req.body;
+            const { _id, name, stack, type, userId } = req.body;
 
             const updatedProfile = await Profile.findByIdAndUpdate(
-                _id, { name, stack, type }, { new: true },
+                _id, { name, stack, type, userId }, { new: true },
             );
 
             const isUpdated = !!updatedProfile;

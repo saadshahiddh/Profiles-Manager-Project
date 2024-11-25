@@ -9,5 +9,6 @@ router.get('/', function(req, res, next) {
 router.use('/cover-letter', require('./cover-letter'));
 router.use('/faq', require('./faq'));
 router.use('/profile', require('./profile'));
+router.use('/user', require('./user'));
 
 module.exports = router;
