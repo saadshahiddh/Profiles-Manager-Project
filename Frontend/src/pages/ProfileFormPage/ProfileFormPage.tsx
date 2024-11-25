@@ -36,7 +36,7 @@ const ProfileFormContent = () => {
     const dispatch: ProfileFormDispatch = useDispatch();
 
     const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
-    const [profileData, setProfileData] = useState<ProfileFormData>(emptyProfileFormData);
+    const [profileFormData, setProfileFormData] = useState<ProfileFormData>(emptyProfileFormData);
     const [profileErrors, setProfileErrors] = useState<Profile>({});
     const [isCoverLettersShown, setIsCoverLettersShown] = useState<boolean>(true);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
@@ -48,7 +48,7 @@ const ProfileFormContent = () => {
     }
     useEffect(() => {
         if (profileId && profileFormDetail) {
-            setProfileData({ ...emptyProfileFormData, ...profileFormDetail })
+            setProfileFormData({ ...emptyProfileFormData, ...profileFormDetail })
         }
     }, [profileFormDetail]);
 
@@ -61,42 +61,42 @@ const ProfileFormContent = () => {
         navigate(-1);
     }
     function handleProfileInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
-        const profile = { ...profileData.profile || {} };
+        const profile = { ...profileFormData.profile || {} };
         if (name == 'name' || name == 'stack' || name == 'type') { // keyof Profile)[]
             profile[name] = value;
         }
-        setProfileData({ ...profileData, profile });
+        setProfileFormData({ ...profileFormData, profile });
         setProfileErrors(prevData => { return { ...prevData, [name]: '' } });
     }
 
-    function handleCoverLetterInputChange(value: string, index: number) {
-        const coverLetters = [...profileData.coverLetters || []];
+    function handleCoverLetterDescriptionChange(value: string, index: number) {
+        const coverLetters = [...profileFormData.coverLetters || []];
         coverLetters[index] = { ...coverLetters[index], description: value };
-        setProfileData({ ...profileData, coverLetters });
+        setProfileFormData({ ...profileFormData, coverLetters });
     }
 
     function handleFaqInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, index: number) {
-        const faqs = [...profileData.faqs || []];
+        const faqs = [...profileFormData.faqs || []];
         if (name == 'question' || name == 'answer') {
             faqs[index] = { ...faqs[index], [name]: value };
         }
-        setProfileData({ ...profileData, faqs });
+        setProfileFormData({ ...profileFormData, faqs });
     }
 
     function addCoverLetter() {
-        const emptyCoverLetter: CoverLetter = { profileId: profileData.profile._id, description: '' };
-        const coverLetters = profileData.coverLetters ? [...profileData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
-        setProfileData({ ...profileData, coverLetters });
+        const emptyCoverLetter: CoverLetter = { profileId: profileFormData.profile._id, description: '' };
+        const coverLetters = profileFormData.coverLetters ? [...profileFormData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
+        setProfileFormData({ ...profileFormData, coverLetters });
     }
 
     function addFaq() {
-        const emptyFaq: Faq = { profileId: profileData.profile._id, question: '', answer: '' };
-        const faqs = profileData.faqs ? [...profileData.faqs, emptyFaq] : [emptyFaq];
-        setProfileData({ ...profileData, faqs });
+        const emptyFaq: Faq = { profileId: profileFormData.profile._id, question: '', answer: '' };
+        const faqs = profileFormData.faqs ? [...profileFormData.faqs, emptyFaq] : [emptyFaq];
+        setProfileFormData({ ...profileFormData, faqs });
     }
 
     async function copyCoverLetter(index: number) {
-        const coverLetter = profileData.coverLetters[index];
+        const coverLetter = profileFormData.coverLetters[index];
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = coverLetter.description || '';
         const textContent = tempDiv.textContent || tempDiv.innerText;
@@ -107,27 +107,29 @@ const ProfileFormContent = () => {
 
     async function deleteCoverLetter() {
         if (coverLetterDeleteIndex != null) {
-            const coverLetter = profileData.coverLetters[coverLetterDeleteIndex];
+            const coverLetter = profileFormData.coverLetters[coverLetterDeleteIndex];
             if (coverLetter._id) {
-                await dispatch(deleteCoverLetterThunk(coverLetter._id)); //? Added this to update ck editors
+                await dispatch(deleteCoverLetterThunk(coverLetter._id)); 
             } else {
-                const coverLetters = profileData.coverLetters.filter((_, i) => i != coverLetterDeleteIndex);
-                setProfileData({ ...profileData, coverLetters });
+                const coverLetters = profileFormData.coverLetters.filter((_, i) => i != coverLetterDeleteIndex);
+                setProfileFormData({ ...profileFormData, coverLetters });
             };
             setCoverLetterDeleteIndex(null);
+
+            //? Added this to update ck editors
             setIsCoverLettersShown(false);
-            setTimeout(() => { setIsCoverLettersShown(true) }, 50);  //? Added this to update ck editors
+            setTimeout(() => { setIsCoverLettersShown(true) }, 50);
         }
     }
 
     async function deleteFaq() {
         if (faqDeleteIndex != null) {
-            const faq = profileData.faqs[faqDeleteIndex];
+            const faq = profileFormData.faqs[faqDeleteIndex];
             if (faq._id) {
                 await dispatch(deleteFaqThunk(faq._id));
             } else {
-                const faqs = profileData.faqs.filter((_, i) => i != faqDeleteIndex);
-                setProfileData({ ...profileData, faqs });
+                const faqs = profileFormData.faqs.filter((_, i) => i != faqDeleteIndex);
+                setProfileFormData({ ...profileFormData, faqs });
             };
             setFaqDeleteIndex(null);
         }
@@ -135,7 +137,7 @@ const ProfileFormContent = () => {
 
     function validateForm() {
         const profileErrors: Profile = {};
-        const { name, type, stack } = profileData.profile;
+        const { name, type, stack } = profileFormData.profile;
         if (!name || !name.trim()) {
             profileErrors['name'] = 'Name is required';
         }
@@ -149,9 +151,9 @@ const ProfileFormContent = () => {
         return !Object.keys(profileErrors).length;
     }
 
-    async function saveProfileData() {
+    async function saveProfileFormData() {
         if (validateForm()) {
-            await dispatch(saveProfileFormDataThunk(profileData));
+            await dispatch(saveProfileFormDataThunk(profileFormData));
             goBack();
         }
     }
@@ -175,7 +177,7 @@ const ProfileFormContent = () => {
                 <div>
                     {isLoading && <FaCircleNotch className='spinner-icon' size={50} />}
                 </div>
-                <button onClick={saveProfileData} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
+                <button onClick={saveProfileFormData} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
                     Save
                 </button>
             </div>
@@ -188,19 +190,19 @@ const ProfileFormContent = () => {
                     <div className='w-full grid grid-cols-2 gap-3'>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
-                            <input type="text" placeholder='John Doe' name='name' value={profileData.profile?.name || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='John Doe' name='name' value={profileFormData.profile?.name || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.name && <div className='text-red-500 text-sm mt-1'>{profileErrors.name}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Type</div>
-                            <input type="text" placeholder='Developer' name='type' value={profileData.profile?.type || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='Developer' name='type' value={profileFormData.profile?.type || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.type && <div className='text-red-500 text-sm mt-1'>{profileErrors.type}</div>}
                         </div>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Stack</div>
-                            <input type="text" placeholder='MERN' name='stack' value={profileData.profile?.stack || ''} onChange={handleProfileInputChange}
+                            <input type="text" placeholder='MERN' name='stack' value={profileFormData.profile?.stack || ''} onChange={handleProfileInputChange}
                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                             {profileErrors.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.stack}</div>}
                         </div>
@@ -219,11 +221,11 @@ const ProfileFormContent = () => {
                         </div>
 
                         {
-                            (profileData.coverLetters?.length && isCoverLettersShown) ?
+                            (profileFormData.coverLetters?.length && isCoverLettersShown) ?
                                 (
                                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-1">
                                         {
-                                            profileData.coverLetters.map((item, cInd) => {
+                                            profileFormData.coverLetters.map((coverLetter, cInd) => {
                                                 return <div key={cInd}>
                                                     <div className='w-full flex items-center justify-between'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
@@ -236,10 +238,10 @@ const ProfileFormContent = () => {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <input type="text" placeholder='I am a MERN stack developer.' name='description' value={(profileData.coverLetters && profileData.coverLetters[cInd].description) || ''} onChange={(e) => { handleCoverLetterInputChange(e.target.value, cInd) }}
-                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    <CKEditor editor={ClassicEditor} data={(profileData.coverLetters && profileData.coverLetters[cInd]?.description) || ''}
-                                                        onChange={(e, editor) => handleCoverLetterInputChange(editor.getData(), cInd)} />
+                                                    {/* <input type="text" placeholder='I am a MERN stack developer.' name='description' value={item.description || ''} onChange={(e) => { handleCoverLetterDescriptionChange(e.target.value, cInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
+                                                    <CKEditor editor={ClassicEditor} data={coverLetter.description || ''}
+                                                        onChange={(_, editor) => handleCoverLetterDescriptionChange(editor.getData(), cInd)} />
                                                 </div>
                                             })
                                         }
@@ -270,10 +272,10 @@ const ProfileFormContent = () => {
 
                         {
 
-                            profileData.faqs?.length ? (
+                            profileFormData.faqs?.length ? (
                                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {
-                                        profileData.faqs.map((item, fInd) => {
+                                        profileFormData.faqs.map((faq, fInd) => {
                                             return <div key={fInd} className='border-b pb-2 mb-3'>
                                                 <div className='w-full flex items-center justify-between'>
                                                     <div></div>
@@ -282,12 +284,12 @@ const ProfileFormContent = () => {
                                                 <div className='flex flex-col gap-1'>
                                                     <div className='w-full'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
-                                                        <input type="text" placeholder='What is your experience?' name='question' value={(profileData.faqs && profileData.faqs[fInd].question) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        <input type="text" placeholder='What is your experience?' name='question' value={faq.question || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                                                     </div>
                                                     <div className='w-full'>
                                                         <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
-                                                        <textarea rows={3} placeholder='I have 1 year of experience in full stack development.' name='answer' value={(profileData.faqs && profileData.faqs[fInd].answer) || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        <textarea rows={3} placeholder='I have 1 year of experience in full stack development.' name='answer' value={faq.answer || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
                                                     </div>
                                                 </div>
