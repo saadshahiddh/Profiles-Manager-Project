@@ -32,12 +32,13 @@ const ProfileFormContent = () => {
     const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
 
-    const { profileFormData, isLoading } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
+    const { profileFormData: profileFormDetail, isLoading } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
     const dispatch: ProfileFormDispatch = useDispatch();
 
     const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
     const [profileData, setProfileData] = useState<ProfileFormData>(emptyProfileFormData);
     const [profileErrors, setProfileErrors] = useState<Profile>({});
+    const [isCoverLettersShown, setIsCoverLettersShown] = useState<boolean>(true);
     const [coverLetterCopiedIndex, setCoverLetterCopiedIndex] = useState<number | null>(null);
     const [coverLetterDeleteIndex, setCoverLetterDeleteIndex] = useState<number | null>(null);
     const [faqDeleteIndex, setFaqDeleteIndex] = useState<number | null>(null);
@@ -46,10 +47,10 @@ const ProfileFormContent = () => {
         useEffect(() => { dispatch(getProfileFormDataThunk(profileId)) }, [dispatch, profileId])
     }
     useEffect(() => {
-        if (profileId && profileFormData) {
-            setProfileData({ ...emptyProfileFormData, ...profileFormData })
+        if (profileId && profileFormDetail) {
+            setProfileData({ ...emptyProfileFormData, ...profileFormDetail })
         }
-    }, [profileFormData]);
+    }, [profileFormDetail]);
 
 
 
@@ -108,12 +109,14 @@ const ProfileFormContent = () => {
         if (coverLetterDeleteIndex != null) {
             const coverLetter = profileData.coverLetters[coverLetterDeleteIndex];
             if (coverLetter._id) {
-                await dispatch(deleteCoverLetterThunk(coverLetter._id));
+                await dispatch(deleteCoverLetterThunk(coverLetter._id)); //? Added this to update ck editors
             } else {
                 const coverLetters = profileData.coverLetters.filter((_, i) => i != coverLetterDeleteIndex);
                 setProfileData({ ...profileData, coverLetters });
             };
             setCoverLetterDeleteIndex(null);
+            setIsCoverLettersShown(false);
+            setTimeout(() => { setIsCoverLettersShown(true) }, 50);  //? Added this to update ck editors
         }
     }
 
@@ -216,7 +219,7 @@ const ProfileFormContent = () => {
                         </div>
 
                         {
-                            profileData.coverLetters?.length ?
+                            (profileData.coverLetters?.length && isCoverLettersShown) ?
                                 (
                                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-1">
                                         {
