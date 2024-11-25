@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import HomePage from './pages/HomePage/HomePage'
 import { NoAuthGuard } from './components/Guards/NoAuthGuard'
 import { AuthGuard } from './components/Guards/AuthGuard'
+import RegisterPage from './pages/RegisterPage/RegisterPage'
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           {/* No-Auth Pages */}
           <Route element={<NoAuthGuard />}>
             <Route path='/login' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
           </Route>
 
 

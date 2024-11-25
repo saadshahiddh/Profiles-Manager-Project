@@ -12,9 +12,9 @@ module.exports = {
 
 
     /**
-     * Create user
+     * Register user
      */
-    async createUser(req, res) {
+    async registerUser(req, res) {
         try {
             const {
                 email,
@@ -54,13 +54,13 @@ module.exports = {
 
             return generateApiResponse(
                 res, StatusCodes.CREATED, true,
-                "User created successfully!",
+                "User registered successfully!",
                 { user: createUser }
             )
         } catch (error) {
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
-                "Error occurred in creating User!",
+                "Error occurred in registering User!",
                 { error }
             );
         }
@@ -78,7 +78,7 @@ module.exports = {
                 email,
                 name,
                 // password,
-                photo,
+                // photo,
             } = req.body;
 
             if (email) {

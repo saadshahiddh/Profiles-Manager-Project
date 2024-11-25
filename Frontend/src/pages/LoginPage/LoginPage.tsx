@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { AuthUser, LoginData } from '../../types/global.types'
+import { AuthUser } from '../../types/global.types'
 import { presentToast } from '../../utilities/tool';
 import { setAuthToken } from '../../utilities/auth';
 import { useNavigate } from 'react-router-dom';
+import { LoginData } from '../../types/user.types';
 
 type LoginErrors = Partial<LoginData>;
 

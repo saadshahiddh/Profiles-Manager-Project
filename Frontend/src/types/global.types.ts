@@ -4,11 +4,6 @@ export interface BackendApiResponse {
     statusCode: number;
 }
 
-export interface LoginData {
-    email: string;
-    password: string;
-}
-
 export type AuthToken = string;
 
 export interface AuthUser {

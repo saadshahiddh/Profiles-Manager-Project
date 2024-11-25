@@ -5,7 +5,7 @@ const { multerSingleUploadRoute } = require('../services/file');
 
 
 //  Routes & Functions
-router.post("/create", userController.createUser);
+router.post("/register", userController.registerUser);
 router.patch("/update", userController.updateUser);
 router.put("/update-photo/:userId", multerSingleUploadRoute, userController.updatePhoto);
 router.delete("/delete/:userId", userController.deleteUser);
