@@ -1,67 +1,47 @@
-import React, { useState } from 'react'
-import { AuthUser } from '../../types/global.types'
-import { presentToast } from '../../utilities/tool';
+import React, { useRef } from 'react'
 import { setAuthToken } from '../../utilities/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { Formik, Form, FormikProps } from 'formik';
+import * as Yup from 'yup';
 import { LoginData } from '../../types/user.types';
+import FormInput from '../../components/FormInput/FormInput';
+import MyButton from '../../components/MyButton/MyButton';
+import { loginUserApi } from '../../apis/user.apis';
+import { presentToast } from '../../utilities/tool';
 
-type LoginErrors = Partial<LoginData>;
+
+
 
 const LoginPage = () => {
+
   /**************************************************
   * Hookes & Others
   */
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState<LoginData>({ email: '', password: '' });
-  const [loginFormErrors, setLoginFormErrors] = useState<LoginErrors>();
+  const loginFormRef = useRef<FormikProps<LoginData>>(null);
+  const initialLoginData: LoginData = {};
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  });
 
 
   /**************************************************
   * Functions
   */
-  function validateForm() {
-    const formErrors: LoginErrors = {};
-    const { email, password } = loginData;
-
-    if (!email || !email.trim()) {
-      formErrors['email'] = 'Email is required';
-    } else if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email)) {
-      formErrors['email'] = 'Invalid Email';
-    }
-
-    if (!password || !password.trim()) {
-      formErrors['password'] = 'Password is required';
-    }
-
-    setLoginFormErrors(formErrors);
-    return !Object.keys(formErrors).length;
-  }
-
-  function handleInputChange({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) {
-    setLoginData(prevData => { return { ...prevData, [name]: value } });
-    setLoginFormErrors(prevData => { return { ...prevData, [name]: '' } });
-  }
-
-
-  function handleSubmit(event: React.FormEvent) {
-    if (event) {
-      event.preventDefault();
-    }
-    if (validateForm()) {
-      const { email, password } = loginData;
-      if (email !== 'johndoe@gmail.com') {
-        presentToast('Email does not exist!', 'error');
-      } else if (password !== '123456789') {
-        presentToast('Invalid password!', 'error');
-      } else {
-        presentToast('Logged in successfully!', 'success');
-        const authUser: AuthUser = { name: 'John Doe', email };
-        setAuthToken(JSON.stringify(authUser));
+  async function handleLoginSubmit() {
+    const user: LoginData = loginFormRef.current?.values || {};
+    await loginFormRef.current?.validateForm();
+    if (loginFormRef.current?.isValid) {
+      loginUserApi(user).then((token) => {
+        setAuthToken(token);
         navigate('/logged-in-redirect');
-      }
+      }, err => {
+      })
+    } else {
+      presentToast('Please fill all the details!', 'warning');
     }
-  }
-
+  };
 
 
   /**************************************************
@@ -69,35 +49,31 @@ const LoginPage = () => {
   */
   return (
     <>
-      <div className="w-full h-full flex items-center justify-center">
-        <form className='shadow border p-5 min-w-96'>
-          <div className='w-full grid grid-cols-1 gap-3'>
-            <div className='text-3xl font-bold text-center mb-5'>
-              Login
-            </div>
-            <div>
-              <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
-              <input type="text" placeholder='johndoe@gmail.com' name='email' value={loginData?.email || ''} onChange={handleInputChange}
-                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-              {(loginFormErrors && loginFormErrors.email) && <div className='text-red-500 text-sm mt-1'>{loginFormErrors.email}</div>}
-            </div>
-            <div>
-              <div className='text-gray-600 font-medium text-sm mb-1'>Password</div>
-              <input type="password" placeholder='********' name='password' value={loginData?.password || ''} onChange={handleInputChange}
-                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-              {(loginFormErrors && loginFormErrors.password) && <div className='text-red-500 text-sm mt-1'>{loginFormErrors.password}</div>}
-            </div>
-            <div className='flex items-center justify-between'>
-              <Link className='cursor-pointer text-blue-500 hover:underline' to={'/register'}>Register</Link>
-              <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700">
+      <Formik innerRef={loginFormRef} initialValues={initialLoginData} validationSchema={validationSchema}
+        onSubmit={(event: any) => { event.preventDefault(); handleLoginSubmit() }}>
+        {
+          <Form>
+            <div className='w-full grid grid-cols-1 gap-3'>
+              <div className='text-3xl font-bold text-center mb-5'>
                 Login
-              </button>
+              </div>
+              <div className='grid grid-cols-1 gap-2'>
+                <FormInput type='email' label='Email' name='email' placeholder='johndoe@gmail.com' />
+                <FormInput type='password' label='Password' name='password' placeholder='********' />
+              </div>
+              <div className='w-full flex justify-end mt-2'>
+              </div>
+              <div className='flex items-center justify-between mt-2'>
+                <Link className='cursor-pointer text-blue-500 hover:underline' to={'/register'}>Register</Link>
+                <MyButton onBtnClick={handleLoginSubmit} label='Login' type='submit' />
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </Form>
+        }
+      </Formik>
     </>
   )
 }
+
 
 export default LoginPage

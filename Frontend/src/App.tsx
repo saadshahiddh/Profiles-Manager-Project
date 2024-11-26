@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage/HomePage'
 import { NoAuthGuard } from './components/Guards/NoAuthGuard'
 import { AuthGuard } from './components/Guards/AuthGuard'
 import RegisterPage from './pages/RegisterPage/RegisterPage'
+import AuthLayout from './layouts/AuthLayout/AuthLayout'
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path='' element={<Navigate to='/home' />} />
+          <Route path='' element={<Navigate to='/login' />} />
           <Route path='logged-in-redirect' element={<Navigate to='/profiles' />} />
           <Route path='logged-out-redirect' element={<Navigate to='/login' />} />
 
@@ -41,8 +42,10 @@ function App() {
 
           {/* No-Auth Pages */}
           <Route element={<NoAuthGuard />}>
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/register' element={<RegisterPage />} />
+            <Route element={<AuthLayout />}>
+              <Route path='/login' element={<LoginPage />} />
+              <Route path='/register' element={<RegisterPage />} />
+            </Route>
           </Route>
 
 

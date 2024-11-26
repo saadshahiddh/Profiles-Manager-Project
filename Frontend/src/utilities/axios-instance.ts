@@ -32,7 +32,8 @@ axiosInstance.interceptors.response.use(
     async (err) => {
         const error: BackendApiResponse = err.response.data;
         showApiErrorToast(error.message);
-        if (error && error.statusCode === 401) {
+        const noAuthRoutes: string[] = ['/login', 'register'];
+        if (error.statusCode == 401 && !noAuthRoutes.includes(window.location.pathname)) {
             window.location.href = '/logged-out-redirect';
             onLogoutUser();
         }

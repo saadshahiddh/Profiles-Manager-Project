@@ -167,7 +167,7 @@ async function validateAuthToken(token, req, res, next, isSkipExpired) {
 
 
 
-const allowedUrls = ['/user/register'];
+const allowedUrls = ['/user/register', '/user/login'];
 const allowedUrlWithParams = [];
 
 /**

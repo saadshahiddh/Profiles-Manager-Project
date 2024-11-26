@@ -35,10 +35,10 @@ const RegisterPage = () => {
     const user: RegisterData = registerFormRef.current?.values || {};
     await registerFormRef.current?.validateForm();
     if (registerFormRef.current?.isValid) {
-      await registerUserApi(user).then((token) => {
+      registerUserApi(user).then((token) => {
         setAuthToken(token);
         navigate('/logged-in-redirect');
-      }, err => {
+        // }, err => {
       })
     } else {
       presentToast('Please fill all the details!', 'warning');
@@ -51,34 +51,30 @@ const RegisterPage = () => {
   */
   return (
     <>
-      <div className="w-full h-full flex items-center justify-center">
-        <Formik innerRef={registerFormRef} initialValues={initialRegisterData} validationSchema={validationSchema}
-          onSubmit={(event: any) => { event.preventDefault(); handleRegisterSubmit() }}>
-          {
-            <Form>
-              <div className='shadow border p-5 min-w-96'>
-                <div className='w-full grid grid-cols-1 gap-3'>
-                  <div className='text-3xl font-bold text-center mb-5'>
-                    Register
-                  </div>
-                  <div className='grid grid-cols-1 gap-2'>
-                    <FormInput type='text' label='Name' name='name' placeholder='John Doe' />
-                    <FormInput type='email' label='Email' name='email' placeholder='johndoe@gmail.com' />
-                    <FormInput type='password' label='Password' name='password' placeholder='********' />
-                    <FormInput type='password' label='Confirm Password' name='confirmPassword' placeholder='********' />
-                  </div>
-                  <div className='w-full flex justify-end mt-2'>
-                  </div>
-                  <div className='flex items-center justify-between mt-2'>
-                    <Link className='cursor-pointer text-blue-500 hover:underline' to={'/login'}>Login</Link>
-                    <MyButton onBtnClick={handleRegisterSubmit} label='Register' type='submit' />
-                  </div>
-                </div>
+      <Formik innerRef={registerFormRef} initialValues={initialRegisterData} validationSchema={validationSchema}
+        onSubmit={(event: any) => { event.preventDefault(); handleRegisterSubmit() }}>
+        {
+          <Form>
+            <div className='w-full grid grid-cols-1 gap-3'>
+              <div className='text-3xl font-bold text-center mb-5'>
+                Register
               </div>
-            </Form>
-          }
-        </Formik>
-      </div>
+              <div className='grid grid-cols-1 gap-2'>
+                <FormInput type='text' label='Name' name='name' placeholder='John Doe' />
+                <FormInput type='email' label='Email' name='email' placeholder='johndoe@gmail.com' />
+                <FormInput type='password' label='Password' name='password' placeholder='********' />
+                <FormInput type='password' label='Confirm Password' name='confirmPassword' placeholder='********' />
+              </div>
+              <div className='w-full flex justify-end mt-2'>
+              </div>
+              <div className='flex items-center justify-between mt-2'>
+                <Link className='cursor-pointer text-blue-500 hover:underline' to={'/login'}>Login</Link>
+                <MyButton onBtnClick={handleRegisterSubmit} label='Register' type='submit' />
+              </div>
+            </div>
+          </Form>
+        }
+      </Formik>
     </>
   )
 }

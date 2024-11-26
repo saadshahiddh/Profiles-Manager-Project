@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { deleteProfileThunk, getAllProfileDetailsThunk, ProfilesDispatch, ProfilesRootState, profilesStore } from './profiles-page.state'
 import { Profile, ProfileDetail } from '../../types/profile.types'
-import { FaPencil, FaTrash, FaCircleNotch } from 'react-icons/fa6'
+import { FaPencil, FaTrash, FaCircleNotch, FaPenToSquare } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog'
 import { formatDateToMediumDate } from '../../utilities/tool'
@@ -94,13 +94,13 @@ const ProfilesContent = () => {
                         */}
                         {
                             profileDetailsList.map(({ _id, name, stack, type, createdAt, faqs, coverLetters }, pInd) => {
-                                return <div key={pInd} className='shadow border p-2'>
+                                return <div key={pInd} className='shadow border p-2 bg-white rounded'>
 
                                     {/* Buttons */}
                                     <div className='w-full flex items-center justify-end'>
                                         <div>
                                             <button className='bg-blue-500 text-white p-1 rounded mx-1' onClick={() => editProfile(_id)}>
-                                                <FaPencil />
+                                                <FaPenToSquare />
                                             </button>
                                             <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteProfile(_id)}>
                                                 <FaTrash />
