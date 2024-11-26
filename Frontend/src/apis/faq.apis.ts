@@ -2,6 +2,7 @@ import { BackendApiResponse } from "../types/global.types";
 import { Faq } from "../types/faq.types";
 import axiosInstance from "../utilities/axios-instance";
 import { showApiSuccessToast } from "../utilities/tool";
+import { Profile } from "../types/profile.types";
 
 
 // /**
@@ -85,3 +86,18 @@ export async function deleteFaqApi(_id: Faq['_id']): Promise<boolean> {
 //         throw error;
 //     }
 // }
+
+
+/**
+ * Get faqs by profile
+ * @returns
+ */
+export async function getFaqsByProfile(profileId: Profile['_id']): Promise<Faq[]> {
+    try {
+        const resp: (BackendApiResponse & { faqs: Faq[] }) = await axiosInstance.get('faq/get-by-profile/' + profileId);
+        return resp.faqs;
+    } catch (err: any) {
+        const error: BackendApiResponse = err.response.data;
+        throw error;
+    }
+}

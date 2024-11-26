@@ -1,5 +1,5 @@
-type MyButtonColor = 'blue';
-interface MyButtonProps { label: string, type: 'button' | 'submit', color?: MyButtonColor, onBtnClick?: () => void };
+type MyButtonColor = 'blue' | 'green' | 'gray';
+interface MyButtonProps { label: string, type?: 'button' | 'submit', color?: MyButtonColor, onBtnClick?: () => void };
 
 const MyButton = ({ label, type = 'button', color = 'blue', onBtnClick }: MyButtonProps) => {
     return (

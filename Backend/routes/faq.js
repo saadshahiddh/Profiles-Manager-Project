@@ -10,6 +10,7 @@ router.patch("/update", faqController.updateFaq);
 router.delete("/delete/:faqId", faqController.deleteFaq);
 router.get("/get/:faqId", faqController.getFaq);
 router.get("/get-all", faqController.getAllFaqs);
+router.get("/get-by-profile/:profileId", faqController.getFaqsByProfile);
 
 
 module.exports = router;

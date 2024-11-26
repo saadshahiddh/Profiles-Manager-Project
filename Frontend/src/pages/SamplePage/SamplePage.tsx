@@ -1,56 +1,24 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import FormInput from '../../components/FormInput/FormInput';
+import React, { useState } from 'react'
+import Modal from '../../components/Modal/Modal';
 
-const LoginForm = () => {
-  const initialValues = {
-    email: '',
-    password: '',
-  };
+const SamplePage = () => {
 
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Required'),
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = (values: { email: string; password: string }) => {
-    console.log('Form Submitted:', values);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {() => (
-        <Form>
-          <FormInput
-            label="Email Address"
-            name="email"
-            placeholder="Enter your email"
-            type="email"
-          />
+    <div>
+      <button onClick={openModal}>Open Modal</button>
 
-          <FormInput
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-            type="password"
-          />
-
-          <button type="submit" className="btn-primary">
-            Login
-          </button>
-        </Form>
-      )}
-    </Formik>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>Custom Modal Title</h2>
+        <p>This is the content inside the modal!</p>
+        <button onClick={closeModal}>Close Modal</button>
+      </Modal>
+    </div>
   );
-};
+}
 
-export default LoginForm;
+export default SamplePage

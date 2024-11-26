@@ -129,4 +129,27 @@ module.exports = {
         }
     },
 
+
+
+    /**
+    * Get faqs by profile
+    */
+    async getFaqsByProfile(req, res) {
+        try {
+            const profileId = req.params.profileId;
+            const faqsByProfile = await Faq.find({ profileId }).sort({ createdAt: -1 });
+            return generateApiResponse(
+                res, StatusCodes.OK, true,
+                "FAQs by Profile fetched successfully!",
+                { faqs: faqsByProfile }
+            );
+        } catch (error) {
+            return generateApiResponse(
+                res, StatusCodes.INTERNAL_SERVER_ERROR, false,
+                "Error occurred in getting FAQs by Profile!",
+                { error }
+            );
+        }
+    },
+
 }

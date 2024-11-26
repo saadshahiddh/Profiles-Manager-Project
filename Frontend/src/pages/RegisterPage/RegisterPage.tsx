@@ -68,7 +68,7 @@ const RegisterPage = () => {
               <div className='w-full flex justify-end mt-2'>
               </div>
               <div className='flex items-center justify-between mt-2'>
-                <Link className='cursor-pointer text-blue-500 hover:underline' to={'/login'}>Login</Link>
+                <Link className='font-semibold cursor-pointer text-blue-500 hover:underline' to={'/login'}>Login</Link>
                 <MyButton onBtnClick={handleRegisterSubmit} label='Register' type='submit' />
               </div>
             </div>

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { deleteProfileThunk, getAllProfileDetailsThunk, ProfilesDispatch, ProfilesRootState, profilesStore } from './profiles-page.state'
 import { Profile, ProfileDetail } from '../../types/profile.types'
-import { FaPencil, FaTrash, FaCircleNotch, FaPenToSquare } from 'react-icons/fa6'
+import { FaTrash, FaCircleNotch, FaPenToSquare } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog'
 import { formatDateToMediumDate } from '../../utilities/tool'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import ProfileFaqs from './Components/ProfileFaqs'
 
 
 const ProfilesPage = () => {
@@ -35,8 +36,11 @@ const ProfilesContent = () => {
     const { profileDetails, isLoading } = useSelector((state: ProfilesRootState) => state.profiles_page_state);
     const dispatch: ProfilesDispatch = useDispatch();
 
-    const [profileDeleteId, setProfileDeleteId] = useState<Profile['_id']>('');
+    const [selectedProfileIdId, setSelectedProfileIdId] = useState<Profile['_id']>('');
     const [profileDetailsList, setProfileDetailsList] = useState<ProfileDetail[]>([]);
+
+    const [isFaqsShown, setIsFaqsShown] = useState<boolean>(false);
+    const [isDeleteModalShown, setIsDeleteModalShown] = useState<boolean>(false);
 
     useEffect(() => { dispatch(getAllProfileDetailsThunk()) }, [dispatch]);
     useEffect(() => {
@@ -59,12 +63,17 @@ const ProfilesContent = () => {
     }
 
     function deleteProfile(_id: Profile['_id']) {
-        setProfileDeleteId(_id);
+        setSelectedProfileIdId(_id);
     }
 
     async function onDeleteProfile() {
-        await dispatch(deleteProfileThunk(profileDeleteId));
-        setProfileDeleteId('');
+        await dispatch(deleteProfileThunk(selectedProfileIdId));
+        setSelectedProfileIdId('');
+    }
+
+    function showFaqs(_id: Profile['_id']) {
+        setSelectedProfileIdId(_id);
+        setIsFaqsShown(true);
     }
 
 
@@ -139,7 +148,7 @@ const ProfilesContent = () => {
                                                             }
                                                         </div>
 
-                                                        {coverLetters.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(_id)}>View More</div>)}
+                                                        <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => editProfile(_id)}>View Detail</div>
                                                     </>
                                                 ) : (
                                                     <div className='text-center text-sm text-gray-500'>No Cover Letters!</div>
@@ -168,7 +177,7 @@ const ProfilesContent = () => {
                                                             </div>
                                                         })
                                                     }
-                                                    {faqs.length > 2 && (<div className='text-center text-sm mt-2 text-blue-500 cursor-pointer hover:underline' onClick={() => editProfile(_id)}>View More</div>)}
+                                                    <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showFaqs(_id)}>View More</div>
                                                 </>
                                             ) : (
                                                 <div className='text-center text-sm text-gray-500'>No FAQs!</div>
@@ -197,11 +206,15 @@ const ProfilesContent = () => {
 
 
         {/* Confimation dialog */}
-        {profileDeleteId &&
-            <ConfirmationDialog title='Delete Profile' onConfirm={onDeleteProfile} onClose={() => setProfileDeleteId('')}>
+        {isDeleteModalShown &&
+            <ConfirmationDialog title='Delete Profile' onConfirm={onDeleteProfile} onClose={() => setSelectedProfileIdId('')}>
                 <div>Are you sure want to delete <b>Profile</b>?</div>
             </ConfirmationDialog>
         }
+
+        {/* FAQs dialog */}
+        {isFaqsShown && <ProfileFaqs profileId={selectedProfileIdId} onCloseModal={() => { setIsFaqsShown(false) }} />}
+
     </>
 }
 
