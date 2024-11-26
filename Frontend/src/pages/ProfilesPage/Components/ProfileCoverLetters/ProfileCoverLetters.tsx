@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Profile } from '../../../../types/profile.types'
 import { CoverLetter } from '../../../../types/cover-letter.types';
 import { getCoverLettersByProfile } from '../../../../apis/cover-letter.apis';

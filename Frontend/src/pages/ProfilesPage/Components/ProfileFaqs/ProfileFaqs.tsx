@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Profile } from '../../../../types/profile.types'
 import { Faq } from '../../../../types/faq.types';
 import { getFaqsByProfile } from '../../../../apis/faq.apis';

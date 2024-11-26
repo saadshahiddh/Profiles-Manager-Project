@@ -1,5 +1,5 @@
 import { AuthToken, BackendApiResponse } from "../types/global.types";
-import { LoginData, RegisterData, User } from "../types/user.types";
+import { LoginData, RegisterData } from "../types/user.types";
 import axiosInstance from "../utilities/axios-instance";
 import { showApiSuccessToast } from "../utilities/tool";
 

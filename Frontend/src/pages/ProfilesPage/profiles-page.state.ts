@@ -1,7 +1,6 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { deleteProfileApi, getProfileDetailsByUserApi } from "../../apis/profile.apis";
 import { Profile, ProfileDetail } from "../../types/profile.types";
-import { User } from "../../types/user.types";
 
 
 

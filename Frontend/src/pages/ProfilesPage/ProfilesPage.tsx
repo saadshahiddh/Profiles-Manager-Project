@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { deleteProfileThunk, getAllProfileDetailsThunk, ProfilesDispatch, ProfilesRootState, profilesStore } from './profiles-page.state'
 import { Profile, ProfileDetail } from '../../types/profile.types'
@@ -65,12 +65,13 @@ const ProfilesContent = () => {
     }
 
     function deleteProfile(_id: Profile['_id']) {
+        setIsDeleteModalShown(true);
         setSelectedProfileIdId(_id);
     }
 
     async function onDeleteProfile() {
         await dispatch(deleteProfileThunk(selectedProfileIdId));
-        setSelectedProfileIdId('');
+        setIsDeleteModalShown(false);
     }
 
     function showCoverLetters(_id: Profile['_id']) {

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { setAuthToken } from '../../utilities/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, FormikProps } from 'formik';
@@ -36,7 +36,6 @@ const LoginPage = () => {
       loginUserApi(user).then((token) => {
         setAuthToken(token);
         navigate('/logged-in-redirect');
-      }, err => {
       })
     } else {
       presentToast('Please fill all the details!', 'warning');
