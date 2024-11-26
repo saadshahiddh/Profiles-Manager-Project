@@ -138,13 +138,13 @@ const ProfilesContent = () => {
 
 
                                     {/* Cover Letters */}
-                                    <div className="flex flex-col flex-grow bg-gray-50 px-4 py-2 border-t-2">
+                                    <div className="flex flex-col flex-grow bg-gray-100 px-4 py-2 border-t-2">
                                         {
                                             coverLetters?.length ?
                                                 (
                                                     <>
                                                         <div className='text-gray-700 text-center text-lg font-semibold mb-2'>Cover Letters</div>
-                                                        <div className='w-full grid grid-cols-2 gap-1'>
+                                                        <div className={`w-full grid grid-cols-1 ${coverLetters.length > 1 && 'sm:grid-cols-2'} gap-1`}>
                                                             {
                                                                 coverLetters.map((coverLetter, cInd) => {
                                                                     return <div key={cInd} className='border rounded'>
@@ -166,7 +166,7 @@ const ProfilesContent = () => {
 
 
                                     {/* FAQs */}
-                                    <div className="flex flex-col flex-grow w-full border-t-2 bg-gray-50 px-4 py-2">
+                                    <div className="flex flex-col flex-grow w-full border-t-2 bg-gray-100 px-4 py-2">
                                         {
                                             faqs?.length ? (
                                                 <>

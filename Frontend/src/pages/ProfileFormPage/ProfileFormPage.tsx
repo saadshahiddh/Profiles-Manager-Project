@@ -9,7 +9,7 @@ import { deleteCoverLetterThunk, deleteFaqThunk, getProfileFormDataThunk, Profil
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
-import { FaCircleNotch } from 'react-icons/fa6';
+import { FaCircleNotch, FaCirclePlus } from 'react-icons/fa6';
 import { getAuthUser } from '../../utilities/auth';
 
 
@@ -111,7 +111,7 @@ const ProfileFormContent = () => {
         if (coverLetterDeleteIndex != null) {
             const coverLetter = profileFormData.coverLetters[coverLetterDeleteIndex];
             if (coverLetter._id) {
-                await dispatch(deleteCoverLetterThunk(coverLetter._id)); 
+                await dispatch(deleteCoverLetterThunk(coverLetter._id));
             } else {
                 const coverLetters = profileFormData.coverLetters.filter((_, i) => i != coverLetterDeleteIndex);
                 setProfileFormData({ ...profileFormData, coverLetters });
@@ -171,7 +171,7 @@ const ProfileFormContent = () => {
             {/* Header */}
             <div className='w-full flex items-center justify-between'>
                 <div className='flex flex-row gap-2'>
-                    <button className='border-2 rounded-full p-2' onClick={() => goBack()}>
+                    <button className='border-2 rounded-full p-2 bg-white' onClick={() => goBack()}>
                         <FaArrowLeft />
                     </button>
                     <div className='text-3xl font-bold'>Profile Form</div>
@@ -187,9 +187,13 @@ const ProfileFormContent = () => {
 
             {/* Profile */}
             <div className='grid gap-5 grid-cols-1 mt-5'>
-                <div className='shadow border p-2'>
 
-                    <div className='w-full grid grid-cols-2 gap-3'>
+                <div className='p-3 bg-white border rounded'>
+                    <div className='w-full flex items-center justify-between border-b pb-2 mb-5'>
+                        <div className='text-lg font-semibold'>Profile</div>
+                        <div></div>
+                    </div>
+                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                         <div>
                             <div className='text-gray-600 font-medium text-sm mb-1'>Name</div>
                             <input type="text" placeholder='John Doe' name='name' value={profileFormData.profile?.name || ''} onChange={handleProfileInputChange}
@@ -209,30 +213,34 @@ const ProfileFormContent = () => {
                             {profileErrors.stack && <div className='text-red-500 text-sm mt-1'>{profileErrors.stack}</div>}
                         </div>
                     </div>
+                </div>
 
-                    <hr className='my-3 border-2' />
+                <hr className='my-3 border-2' />
 
 
-                    {/* Cover Letters */}
-                    <div className="w-full">
-                        <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
-                            <div className='text-lg font-semibold'>Cover Letters</div>
-                            <button onClick={addCoverLetter} className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
-                                Add Cover Letter
-                            </button>
-                        </div>
+                {/* Cover Letters */}
+                <div className='p-3 bg-white border rounded'>
+                    <div className='w-full flex items-center justify-between border-b pb-2 mb-5'>
+                        <div className='text-lg font-semibold'>Cover Letters</div>
+                        <button onClick={addCoverLetter} className="px-3 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-700">
+                            <div className='flex flex-row items-center gap-2'>
+                                <FaCirclePlus />
+                                <span>Add Cover Letter</span>
+                            </div>
+                        </button>
+                    </div>
 
-                        {
-                            (profileFormData.coverLetters?.length && isCoverLettersShown) ?
-                                (
-                                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-1">
-                                        {
-                                            profileFormData.coverLetters.map((coverLetter, cInd) => {
-                                                return <div key={cInd}>
-                                                    <div className='w-full flex items-center justify-between'>
-                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Description</div>
+                    {
+                        (profileFormData.coverLetters?.length && isCoverLettersShown) ?
+                            (
+                                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    {
+                                        profileFormData.coverLetters.map((coverLetter, cInd) => {
+                                            return <div key={cInd}>
+                                                <div className='w-full'>
+                                                    <div className='flex items-center justify-end mb-2'>
                                                         <div>
-                                                            <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == cInd ? 'bg-blue-500' : 'bg-gray-500'}`} onClick={() => copyCoverLetter(cInd)}>
+                                                            <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == cInd ? 'bg-green-500' : 'bg-blue-500'}`} onClick={() => copyCoverLetter(cInd)}>
                                                                 {coverLetterCopiedIndex == cInd ? <FaCheck /> : <FaCopy />}
                                                             </button>
                                                             <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => setCoverLetterDeleteIndex(cInd)}>
@@ -245,72 +253,74 @@ const ProfileFormContent = () => {
                                                     <CKEditor editor={ClassicEditor} data={coverLetter.description || ''}
                                                         onChange={(_, editor) => handleCoverLetterDescriptionChange(editor.getData(), cInd)} />
                                                 </div>
-                                            })
-                                        }
-                                    </div>
-                                ) :
-                                (
-                                    <div className='w-full text-center text-gray-600 text-sm'>
-                                        No Cover Letters found!
-                                    </div>
-                                )
-                        }
-
-                    </div>
-
-
-                    <hr className='my-3 border-2' />
-
-
-                    {/* FAQs */}
-                    <div className="w-full">
-                        <div className='w-full flex items-center justify-between border-b pb-2 mb-2'>
-                            <div className='text-lg font-semibold'>FAQs</div>
-                            <button onClick={addFaq} className="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
-                                Add FAQ
-                            </button>
-                        </div>
-
-
-                        {
-
-                            profileFormData.faqs?.length ? (
-                                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {
-                                        profileFormData.faqs.map((faq, fInd) => {
-                                            return <div key={fInd} className='border-b pb-2 mb-3'>
-                                                <div className='w-full flex items-center justify-between'>
-                                                    <div></div>
-                                                    <button className='bg-red-500 text-white px-2 rounded' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
-                                                </div>
-                                                <div className='flex flex-col gap-1'>
-                                                    <div className='w-full'>
-                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
-                                                        <input type="text" placeholder='What is your experience?' name='question' value={faq.question || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
-                                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    </div>
-                                                    <div className='w-full'>
-                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
-                                                        <textarea rows={3} placeholder='I have 1 year of experience in full stack development.' name='answer' value={faq.answer || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
-                                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
-                                                    </div>
-                                                </div>
                                             </div>
                                         })
                                     }
                                 </div>
                             ) :
-                                (
-                                    <div className='w-full text-center text-gray-600 text-sm'>
-                                        No FAQs found!
-                                    </div>
-                                )
-
-                        }
-
-                    </div>
+                            (
+                                <div className='w-full text-center text-gray-600 text-sm'>
+                                    No Cover Letters found!
+                                </div>
+                            )
+                    }
 
                 </div>
+
+
+                <hr className='my-3 border-2' />
+
+
+                {/* FAQs */}
+                <div className='p-3 bg-white border rounded'>
+                    <div className='w-full flex items-center justify-between border-b pb-2 mb-5'>
+                        <div className='text-lg font-semibold'>FAQs</div>
+                        <button onClick={addFaq} className="px-3 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-700">
+                            <div className='flex flex-row items-center gap-2'>
+                                <FaCirclePlus />
+                                <span>Add FAQ</span>
+                            </div>
+                        </button>
+                    </div>
+
+
+                    {
+
+                        profileFormData.faqs?.length ? (
+                            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6">
+                                {
+                                    profileFormData.faqs.map((faq, fInd) => {
+                                        return <div key={fInd} className='border-b pb-2 mb-3'>
+                                            <div className='flex flex-col gap-1'>
+                                                <div className='w-full'>
+                                                    <div className='w-full flex items-center justify-between'>
+                                                        <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
+                                                        <button className='bg-red-500 text-white px-2 rounded mb-2' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
+                                                    </div>
+                                                    <input type="text" placeholder='What is your experience?' name='question' value={faq.question || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                </div>
+                                                <div className='w-full'>
+                                                    <div className='text-gray-600 font-medium text-sm mb-1'>Answer</div>
+                                                    <textarea rows={3} placeholder='I have 1 year of experience in full stack development.' name='answer' value={faq.answer || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
+                                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    })
+                                }
+                            </div>
+                        ) :
+                            (
+                                <div className='w-full text-center text-gray-600 text-sm'>
+                                    No FAQs found!
+                                </div>
+                            )
+
+                    }
+
+                </div>
+
 
             </div>
 

@@ -34,3 +34,7 @@ body,
     border: none !important;
     outline: none !important;
 }
+
+.ck.ck-editor__editable {
+    min-height: 500px;
+}
