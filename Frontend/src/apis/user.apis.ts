@@ -4,6 +4,9 @@ import axiosInstance from "../utilities/axios-instance";
 import { showApiSuccessToast } from "../utilities/tool";
 
 
+const userBaseUrl = 'user';
+
+
 /**
  * Register user api
  * @param registerData 
@@ -11,12 +14,11 @@ import { showApiSuccessToast } from "../utilities/tool";
  */
 export async function registerUserApi(registerData: RegisterData): Promise<AuthToken> {
     try {
-        const resp: (BackendApiResponse & { token: AuthToken }) = await axiosInstance.post('user/register', registerData);
+        const resp: (BackendApiResponse & { token: AuthToken }) = await axiosInstance.post(`${userBaseUrl}/register`, registerData);
         showApiSuccessToast(resp.message);
         return resp.token;
     } catch (err: any) {
-        const error: BackendApiResponse = err.response.data;
-        throw error;
+        throw (err.response.data as BackendApiResponse);
     }
 }
 
@@ -28,14 +30,14 @@ export async function registerUserApi(registerData: RegisterData): Promise<AuthT
  */
 export async function loginUserApi(loginData: LoginData): Promise<AuthToken> {
     try {
-        const resp: (BackendApiResponse & { token: AuthToken }) = await axiosInstance.post('user/login', loginData);
+        const resp: (BackendApiResponse & { token: AuthToken }) = await axiosInstance.post(`${userBaseUrl}/login`, loginData);
         showApiSuccessToast(resp.message);
         return resp.token;
     } catch (err: any) {
-        const error: BackendApiResponse = err.response.data;
-        throw error;
+        throw (err.response.data as BackendApiResponse);
     }
 }
+
 
 // /**
 //  * Update user api
@@ -44,12 +46,11 @@ export async function loginUserApi(loginData: LoginData): Promise<AuthToken> {
 //  */
 // export async function updateUserApi(user: User): Promise<User> {
 //     try {
-//         const resp: (BackendApiResponse & { user: User }) = await axiosInstance.patch('user/update', user);
+//         const resp: (BackendApiResponse & { user: User }) = await axiosInstance.patch(`${userBaseUrl}/update`, user);
 //         showApiSuccessToast(resp.message);
 //         return resp.user;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -61,12 +62,11 @@ export async function loginUserApi(loginData: LoginData): Promise<AuthToken> {
 //  */
 // export async function getUserApi(_id: User['_id']): Promise<User> {
 //     try {
-//         const resp: (BackendApiResponse & { user: User }) = await axiosInstance.get(`user/get/${_id}`);
+//         const resp: (BackendApiResponse & { user: User }) = await axiosInstance.get(`${userBaseUrl}/get/${_id}`);
 //         showApiSuccessToast(resp.message);
 //         return resp.user;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -78,12 +78,11 @@ export async function loginUserApi(loginData: LoginData): Promise<AuthToken> {
 //  */
 // export async function deleteUserApi(_id: User['_id']): Promise<boolean> {
 //     try {
-//         const resp: (BackendApiResponse) = await axiosInstance.delete(`user/delete/${_id}`);
+//         const resp: (BackendApiResponse) = await axiosInstance.delete(`${userBaseUrl}/delete/${_id}`);
 //         showApiSuccessToast(resp.message);
 //         return true;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -94,10 +93,9 @@ export async function loginUserApi(loginData: LoginData): Promise<AuthToken> {
 //  */
 // export async function getAllUsersApi(): Promise<User[]> {
 //     try {
-//         const resp: (BackendApiResponse & { users: User[] }) = await axiosInstance.get('user/get-all');
+//         const resp: (BackendApiResponse & { users: User[] }) = await axiosInstance.get(`${userBaseUrl}/get-all`);
 //         return resp.users;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }

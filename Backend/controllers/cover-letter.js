@@ -129,4 +129,29 @@ module.exports = {
         }
     },
 
+
+
+    /**
+    * Get cover lLetters by profile
+    */
+    async getCoverLettersByProfile(req, res) {
+        try {
+            const profileId = req.params.profileId;
+            const coverLettersByProfile = await CoverLetter.find({ profileId }).sort({ createdAt: -1 });
+            return generateApiResponse(
+                res, StatusCodes.OK, true,
+                "Cover Letters by Profile fetched successfully!",
+                { coverLetters: coverLettersByProfile }
+            );
+        } catch (error) {
+            return generateApiResponse(
+                res, StatusCodes.INTERNAL_SERVER_ERROR, false,
+                "Error occurred in getting Cover Letters by Profile!",
+                { error }
+            );
+        }
+    },
+
+
+
 }

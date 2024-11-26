@@ -8,7 +8,8 @@ import ConfirmationDialog from '../../components/ConfirmationDialog/Confirmation
 import { formatDateToMediumDate } from '../../utilities/tool'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import ProfileFaqs from './Components/ProfileFaqs'
+import ProfileFaqs from './Components/ProfileFaqs/ProfileFaqs'
+import ProfileCoverLetters from './Components/ProfileCoverLetters/ProfileCoverLetters'
 
 
 const ProfilesPage = () => {
@@ -40,6 +41,7 @@ const ProfilesContent = () => {
     const [profileDetailsList, setProfileDetailsList] = useState<ProfileDetail[]>([]);
 
     const [isFaqsShown, setIsFaqsShown] = useState<boolean>(false);
+    const [isCoverLettersShown, setIsCoverLettersShown] = useState<boolean>(false);
     const [isDeleteModalShown, setIsDeleteModalShown] = useState<boolean>(false);
 
     useEffect(() => { dispatch(getAllProfileDetailsThunk()) }, [dispatch]);
@@ -69,6 +71,11 @@ const ProfilesContent = () => {
     async function onDeleteProfile() {
         await dispatch(deleteProfileThunk(selectedProfileIdId));
         setSelectedProfileIdId('');
+    }
+
+    function showCoverLetters(_id: Profile['_id']) {
+        setSelectedProfileIdId(_id);
+        setIsCoverLettersShown(true);
     }
 
     function showFaqs(_id: Profile['_id']) {
@@ -140,7 +147,7 @@ const ProfilesContent = () => {
                                                         <div className='w-full grid grid-cols-2 gap-1'>
                                                             {
                                                                 coverLetters.slice(0, 2).map((coverLetter, cInd) => {
-                                                                    return <div key={cInd}>
+                                                                    return <div key={cInd} className='border'>
                                                                         <CKEditor editor={ClassicEditor} data={coverLetter.description!.length > 140 ? coverLetter.description?.slice(0, coverLetter.description!.lastIndexOf(' ', 140)) + '...' : coverLetter?.description}
                                                                             config={{ toolbar: [] }} onReady={(editor) => { editor.enableReadOnlyMode('my-feature-id') }} />
                                                                     </div>
@@ -148,7 +155,7 @@ const ProfilesContent = () => {
                                                             }
                                                         </div>
 
-                                                        <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => editProfile(_id)}>View Detail</div>
+                                                        <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showCoverLetters(_id)}>View More</div>
                                                     </>
                                                 ) : (
                                                     <div className='text-center text-sm text-gray-500'>No Cover Letters!</div>
@@ -211,6 +218,10 @@ const ProfilesContent = () => {
                 <div>Are you sure want to delete <b>Profile</b>?</div>
             </ConfirmationDialog>
         }
+
+
+        {/* Cover Letters dialog */}
+        {isCoverLettersShown && <ProfileCoverLetters profileId={selectedProfileIdId} onCloseModal={() => { setIsCoverLettersShown(false) }} />}
 
         {/* FAQs dialog */}
         {isFaqsShown && <ProfileFaqs profileId={selectedProfileIdId} onCloseModal={() => { setIsFaqsShown(false) }} />}

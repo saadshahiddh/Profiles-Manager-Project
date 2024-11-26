@@ -2,6 +2,9 @@ import { BackendApiResponse } from "../types/global.types";
 import { CoverLetter } from "../types/cover-letter.types";
 import axiosInstance from "../utilities/axios-instance";
 import { showApiSuccessToast } from "../utilities/tool";
+import { Profile } from "../types/profile.types";
+
+const coverLetterBaseUrl = 'cover-letter'
 
 
 // /**
@@ -11,12 +14,11 @@ import { showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function createCoverLetterApi(coverLetter: CoverLetter): Promise<CoverLetter> {
 //     try {
-//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.post('cover-letter/create', coverLetter);
+//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.post(`${coverLetterBaseUrl}/create`, coverLetter);
 //         showApiSuccessToast(resp.message);
 //         return resp.coverLetter;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -28,12 +30,11 @@ import { showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function updateCoverLetterApi(coverLetter: CoverLetter): Promise<CoverLetter> {
 //     try {
-//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.patch('cover-letter/update', coverLetter);
+//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.patch(`${coverLetterBaseUrl}/update`, coverLetter);
 //         showApiSuccessToast(resp.message);
 //         return resp.coverLetter;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -45,12 +46,11 @@ import { showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function getCoverLetterApi(_id: CoverLetter['_id']): Promise<CoverLetter> {
 //     try {
-//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.get(`cover-letter/get/${_id}`);
+//         const resp: (BackendApiResponse & { coverLetter: CoverLetter }) = await axiosInstance.get(`${coverLetterBaseUrl}/get/${_id}`);
 //         showApiSuccessToast(resp.message);
 //         return resp.coverLetter;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
 
@@ -66,8 +66,7 @@ export async function deleteCoverLetterApi(_id: CoverLetter['_id']): Promise<boo
         showApiSuccessToast(resp.message);
         return true;
     } catch (err: any) {
-        const error: BackendApiResponse = err.response.data;
-        throw error;
+        throw (err.response.data as BackendApiResponse);
     }
 }
 
@@ -78,10 +77,24 @@ export async function deleteCoverLetterApi(_id: CoverLetter['_id']): Promise<boo
 //  */
 // export async function getAllCoverLettersApi(): Promise<CoverLetter[]> {
 //     try {
-//         const resp: (BackendApiResponse & { coverLetters: CoverLetter[] }) = await axiosInstance.get('cover-letter/get-all');
+//         const resp: (BackendApiResponse & { coverLetters: CoverLetter[] }) = await axiosInstance.get(`${coverLetterBaseUrl}/get-all`);
 //         return resp.coverLetters;
 //     } catch (err: any) {
-//         const error: BackendApiResponse = err.response.data;
-//         throw error;
+//         throw (err.response.data as BackendApiResponse);
 //     }
 // }
+
+
+
+/**
+ * Get cover letters by profile
+ * @returns
+ */
+export async function getCoverLettersByProfile(profileId: Profile['_id']): Promise<CoverLetter[]> {
+    try {
+        const resp: (BackendApiResponse & { coverLetters: CoverLetter[] }) = await axiosInstance.get(`${coverLetterBaseUrl}/get-by-profile/` + profileId);
+        return resp.coverLetters;
+    } catch (err: any) {
+        throw (err.response.data as BackendApiResponse);
+    }
+}

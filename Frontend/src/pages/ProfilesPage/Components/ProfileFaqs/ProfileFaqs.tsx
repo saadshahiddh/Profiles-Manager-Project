@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Profile } from '../../../types/profile.types'
-import { Faq } from '../../../types/faq.types';
-import { getFaqsByProfile } from '../../../apis/faq.apis';
-import Modal from '../../../components/Modal/Modal';
+import { Profile } from '../../../../types/profile.types'
+import { Faq } from '../../../../types/faq.types';
+import { getFaqsByProfile } from '../../../../apis/faq.apis';
+import Modal from '../../../../components/Modal/Modal';
 import { FaCheck, FaCopy } from 'react-icons/fa6';
 
 interface ProfileFaqsProps { profileId: Profile['_id']; onCloseModal: () => void; };
@@ -34,16 +34,16 @@ const ProfileFaqs = ({ profileId, onCloseModal }: ProfileFaqsProps) => {
                         faqs?.length ? (
                             <>
                                 {
-                                    faqs.map((faq, fInd) => {
-                                        return <div key={fInd} className='border-b pb-2 mb-3'>
+                                    faqs.map((faq, ind) => {
+                                        return <div key={ind} className='border-b pb-2 mb-3'>
                                             <div className='w-full flex flex-row'>
                                                 <div className='flex-grow text-gray-600 font-medium mb-1'>
                                                     {faq.question}
                                                 </div>
                                                 <div className='flex-shrink pl-1'>
-                                                    <button className={`text-white p-1 rounded mx-1 ${faqCopiedIndex == fInd ? 'bg-green-500' : 'bg-blue-500'}`}
-                                                        onClick={() => copyFaq(fInd)}>
-                                                        {faqCopiedIndex == fInd ? <FaCheck /> : <FaCopy />}
+                                                    <button className={`text-white p-1 rounded mx-1 ${faqCopiedIndex == ind ? 'bg-green-500' : 'bg-blue-500'}`}
+                                                        onClick={() => copyFaq(ind)}>
+                                                        {faqCopiedIndex == ind ? <FaCheck /> : <FaCopy />}
                                                     </button>
                                                 </div>
                                             </div>
