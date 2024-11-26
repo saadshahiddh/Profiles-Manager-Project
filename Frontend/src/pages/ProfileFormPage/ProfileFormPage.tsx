@@ -10,6 +10,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import { FaTrash, FaCopy, FaCheck, FaArrowLeft } from 'react-icons/fa';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import { FaCircleNotch } from 'react-icons/fa6';
+import { getAuthUser } from '../../utilities/auth';
 
 
 const ProfileFormPage = () => {
@@ -28,6 +29,7 @@ const ProfileFormContent = () => {
     /**************************************************
      * Hookes & Others
      */
+    const authUser = getAuthUser();
     const location = useLocation();
     const navigate = useNavigate();
     const profileId: Profile['_id'] = (new URLSearchParams(location.search)).get('profileId') || '';
@@ -35,7 +37,7 @@ const ProfileFormContent = () => {
     const { profileFormData: profileFormDetail, isLoading } = useSelector((state: ProfileFormRootState) => state.profile_form_state);
     const dispatch: ProfileFormDispatch = useDispatch();
 
-    const emptyProfileFormData: ProfileFormData = { profile: {}, coverLetters: [], faqs: [] };
+    const emptyProfileFormData: ProfileFormData = { userId: authUser?._id, profile: {}, coverLetters: [], faqs: [] };
     const [profileFormData, setProfileFormData] = useState<ProfileFormData>(emptyProfileFormData);
     const [profileErrors, setProfileErrors] = useState<Profile>({});
     const [isCoverLettersShown, setIsCoverLettersShown] = useState<boolean>(true);

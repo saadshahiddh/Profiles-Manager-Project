@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { AuthUser } from '../../types/global.types'
 import { presentToast } from '../../utilities/tool';
 import { setAuthToken } from '../../utilities/auth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginData } from '../../types/user.types';
 
 type LoginErrors = Partial<LoginData>;
@@ -87,7 +87,8 @@ const LoginPage = () => {
                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />
               {(loginFormErrors && loginFormErrors.password) && <div className='text-red-500 text-sm mt-1'>{loginFormErrors.password}</div>}
             </div>
-            <div className='flex items-center justify-end'>
+            <div className='flex items-center justify-between'>
+              <Link className='cursor-pointer text-blue-500 hover:underline' to={'/register'}>Register</Link>
               <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700">
                 Login
               </button>

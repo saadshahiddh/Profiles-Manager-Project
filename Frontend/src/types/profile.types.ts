@@ -1,5 +1,6 @@
 import { CoverLetter } from "./cover-letter.types";
 import { Faq } from "./faq.types";
+import { User } from "./user.types";
 
 export interface Profile {
     _id?: string;
@@ -16,6 +17,7 @@ export interface ProfileDetail extends Profile {
 }
 
 export interface ProfileFormData {
+    userId: User['_id'],
     profile: Profile;
     coverLetters: CoverLetter[];
     faqs: Faq[];

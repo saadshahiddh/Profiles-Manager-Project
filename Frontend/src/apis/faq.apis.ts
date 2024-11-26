@@ -1,7 +1,7 @@
 import { BackendApiResponse } from "../types/global.types";
 import { Faq } from "../types/faq.types";
 import axiosInstance from "../utilities/axios-instance";
-import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
+import { showApiSuccessToast } from "../utilities/tool";
 
 
 // /**
@@ -11,12 +11,11 @@ import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function createFaqApi(faq: Faq): Promise<Faq> {
 //     try {
-//         const resp: (BackendApiResponse & { faq: Faq }) = (await axiosInstance.post('faq/create', faq)).data;
+//         const resp: (BackendApiResponse & { faq: Faq }) = await axiosInstance.post('faq/create', faq);
 //         showApiSuccessToast(resp.message);
 //         return resp.faq;
 //     } catch (err: any) {
 //         const error: BackendApiResponse = err.response.data;
-//         showApiErrorToast(error.message);
 //         throw error;
 //     }
 // }
@@ -29,12 +28,11 @@ import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function updateFaqApi(faq: Faq): Promise<Faq> {
 //     try {
-//         const resp: (BackendApiResponse & { faq: Faq }) = (await axiosInstance.patch('faq/update', faq)).data;
+//         const resp: (BackendApiResponse & { faq: Faq }) = await axiosInstance.patch('faq/update', faq);
 //         showApiSuccessToast(resp.message);
 //         return resp.faq;
 //     } catch (err: any) {
 //         const error: BackendApiResponse = err.response.data;
-//         showApiErrorToast(error.message);
 //         throw error;
 //     }
 // }
@@ -47,12 +45,11 @@ import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
 //  */
 // export async function getFaqApi(_id: Faq['_id']): Promise<Faq> {
 //     try {
-//         const resp: (BackendApiResponse & { faq: Faq }) = (await axiosInstance.get(`faq/get/${_id}`)).data;
+//         const resp: (BackendApiResponse & { faq: Faq }) = await axiosInstance.get(`faq/get/${_id}`);
 //         showApiSuccessToast(resp.message);
 //         return resp.faq;
 //     } catch (err: any) {
 //         const error: BackendApiResponse = err.response.data;
-//         showApiErrorToast(error.message);
 //         throw error;
 //     }
 // }
@@ -65,12 +62,11 @@ import { showApiErrorToast, showApiSuccessToast } from "../utilities/tool";
  */
 export async function deleteFaqApi(_id: Faq['_id']): Promise<boolean> {
     try {
-        const resp: (BackendApiResponse) = (await axiosInstance.delete(`faq/delete/${_id}`)).data;
+        const resp: (BackendApiResponse) = await axiosInstance.delete(`faq/delete/${_id}`);
         showApiSuccessToast(resp.message);
         return true;
     } catch (err: any) {
         const error: BackendApiResponse = err.response.data;
-        showApiErrorToast(error.message);
         throw error;
     }
 }
@@ -78,15 +74,14 @@ export async function deleteFaqApi(_id: Faq['_id']): Promise<boolean> {
 
 // /**
 //  * Get all faqs api
-//  * @returns 
+//  * @returns
 //  */
 // export async function getAllFaqsApi(): Promise<Faq[]> {
 //     try {
-//         const resp: (BackendApiResponse & { faqs: Faq[] }) = (await axiosInstance.get('faq/get-all')).data;
+//         const resp: (BackendApiResponse & { faqs: Faq[] }) = await axiosInstance.get('faq/get-all');
 //         return resp.faqs;
 //     } catch (err: any) {
 //         const error: BackendApiResponse = err.response.data;
-//         showApiErrorToast(error.message);
 //         throw error;
 //     }
 // }

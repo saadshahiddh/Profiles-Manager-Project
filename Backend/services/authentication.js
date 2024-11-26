@@ -6,6 +6,7 @@ const moment = require("moment");
 
 
 
+
 /**
  * Encode auth token
  * @param {*} user 
@@ -49,7 +50,7 @@ async function checkAuthToken(req, res, next, isSkipExpired) {
         if (!authHeader) {
             return generateApiResponse(
                 res, StatusCodes.UNAUTHORIZED, false,
-                "Auth header does not exist!",
+                "No Authorization found!",
             );
         }
 
@@ -91,12 +92,11 @@ async function getAuthUserData(_id) {
 
 /**
  * Generate auth user token
- * @param {*} _id 
- * @param {*} userData 
+ * @param {*} userIdOrData 
  * @returns 
  */
-async function generateAuthUserToken(_id, userData) {
-    const user = userData ? formatMongooseData(userData) : (await getAuthUserData(_id));
+async function generateAuthUserToken(userIdOrData) {
+    const user = userIdOrData?._id ? formatMongooseData(userIdOrData) : (await getAuthUserData(userIdOrData));
     const token = encodeAuthToken(user);
     return token;
 }
@@ -146,13 +146,13 @@ async function validateAuthToken(token, req, res, next, isSkipExpired) {
             };
         }
 
-        if (!authUser?.isEnabled) {
-            return {
-                valid: false, isSuccess: false,
-                statusCode: StatusCodes.UNAUTHORIZED,
-                message: "Auth User is disabled!"
-            };
-        }
+        // if (!authUser?.isEnabled) {
+        //     return {
+        //         valid: false, isSuccess: false,
+        //         statusCode: StatusCodes.UNAUTHORIZED,
+        //         message: "Auth User is disabled!"
+        //     };
+        // }
 
         return { valid: true, authUser };
     } catch (error) {
@@ -166,10 +166,32 @@ async function validateAuthToken(token, req, res, next, isSkipExpired) {
 }
 
 
+
+const allowedUrls = ['/user/register'];
+const allowedUrlWithParams = [];
+
+/**
+ * Token checker middle ware
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+async function tokenCheckerMiddleWare(req, res, next) {
+    if (req.url.startsWith("/file/") || allowedUrls.includes(req.url) || allowedUrlWithParams.some(element => req.url.startsWith(element))) {
+        next();
+    } else {
+        await checkAuthToken(req, res, next);
+    }
+}
+
+
+
+
 module.exports = {
     checkAuthToken,
     getAuthUserData,
     generateAuthUserToken,
     validateAuthToken,
+    tokenCheckerMiddleWare,
 };
 

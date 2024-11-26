@@ -85,10 +85,23 @@ function formatMongooseData(data) {
   }
 }
 
+
+
+/**
+ * Convert simple to mongoose object id
+ * @param {*} id 
+ * @returns 
+ */
+function convertSimpleToMongooseObjectId(_id) {
+  return mongoose.Types.ObjectId.isValid(_id) && !(_id instanceof mongoose.Types.ObjectId) ? new mongoose.Types.ObjectId(_id) : _id;
+}
+
+
 module.exports = {
   getEnvVariable,
   generateApiResponse,
   formatMongooseData,
+  convertSimpleToMongooseObjectId,
 };
 
 

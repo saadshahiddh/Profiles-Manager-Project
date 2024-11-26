@@ -1,6 +1,6 @@
 import { AuthToken, AuthUser } from "../types/global.types";
 import { TOKEN_LOCAL_KEY } from "./environment";
-
+import { jwtDecode } from "jwt-decode";
 
 /**
  * Set auth token
@@ -27,7 +27,8 @@ export function getAuthToken(): AuthToken {
 export function getAuthUser(): AuthUser | null {
     const token = getAuthToken();
     try {
-        return JSON.parse(token); // jwtDecode(token) as User
+        return jwtDecode(token) as AuthUser;
+        // return JSON.parse(token);
     } catch (error) {
         return null;
     }

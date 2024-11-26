@@ -1,8 +1,9 @@
 const { CoverLetter, Faq, Profile } = require("../database");
 const { StatusCodes } = require("http-status-codes");
-const { generateApiResponse, formatMongooseData } = require("../services/utilities");
+const { generateApiResponse, formatMongooseData, convertSimpleToMongooseObjectId } = require("../services/utilities");
 const { ModelReferences, PopulateReferences } = require("../utils/database-reference");
 const { getProfileFormDataObj } = require("../model-services/profile");
+const mongoose = require('mongoose');
 
 
 
@@ -138,12 +139,15 @@ module.exports = {
 
 
     /**
-    * Get all profile details
+    * Get  profile details by user
     */
-    async getAllProfileDetails(req, res) {
+    async getProfileDetailsByUser(req, res) {
         try {
-            const allProfileDetails = await Profile.aggregate([
-                { $sort: { createdAt: -1 }, },
+            const userId = convertSimpleToMongooseObjectId(req.user._id);
+
+            const profileDetails = await Profile.aggregate([
+                { $match: { userId } },
+                { $sort: { createdAt: -1 } },
                 {
                     $lookup: {
                         from: PopulateReferences.MULTIPLE_COVER_LETTER,
@@ -170,13 +174,13 @@ module.exports = {
 
             return generateApiResponse(
                 res, StatusCodes.OK, true,
-                "All Profiles fetched successfully!",
-                { profileDetails: allProfileDetails }
+                "Profile Details by user fetched successfully!",
+                { profileDetails }
             );
         } catch (error) {
             return generateApiResponse(
                 res, StatusCodes.INTERNAL_SERVER_ERROR, false,
-                "Error occurred in getting All Profiles!",
+                "Error occurred in getting Profile Details by user!",
                 { error }
             );
         }
@@ -215,13 +219,13 @@ module.exports = {
      */
     async saveProfileFormData(req, res) {
         try {
-            const { profile, faqs, coverLetters } = req.body;
+            const { userId, profile, faqs, coverLetters } = req.body;
 
             let profileId = profile?._id;
             const profileAction = profileId ? 'created' : 'updated';
 
             const { name = '', stack = '', type = '' } = profile || {};
-            const profileData = { name, stack, type };
+            const profileData = { name, stack, type, userId };
             if (profileId) {
                 const updatedProfile = await Profile.findByIdAndUpdate(
                     profileId, profileData, { new: true },

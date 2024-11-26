@@ -52,10 +52,11 @@ module.exports = {
                 photo: photo,
             });
 
+            const token = await generateAuthUserToken(createUser);
             return generateApiResponse(
                 res, StatusCodes.CREATED, true,
                 "User registered successfully!",
-                { user: createUser }
+                { token }
             )
         } catch (error) {
             return generateApiResponse(
@@ -104,7 +105,7 @@ module.exports = {
             );
 
             const isUpdated = !!updatedUser;
-            const token = await generateAuthUserToken(_id, updatedUser);
+            const token = await generateAuthUserToken(updatedUser);
             return generateApiResponse(
                 res, StatusCodes.OK, isUpdated,
                 (isUpdated ? "User updated successfully!" : "No User data updated!"),
@@ -145,7 +146,7 @@ module.exports = {
 
             await fileRemover(foundUser?.photo);
             const updatedUser = await User.findByIdAndUpdate(_id, { photo }, { new: true });
-            const token = await generateAuthUserToken(_id, updatedUser);
+            const token = await generateAuthUserToken(updatedUser);
             return generateApiResponse(
                 res, StatusCodes.OK, true,
                 (photo ? "User photo updated successfully!" : "User photo removed successfully!"),
@@ -263,7 +264,7 @@ module.exports = {
                 );
             }
 
-            const token = await generateAuthUserToken(foundUser?._id, foundUser);
+            const token = await generateAuthUserToken(foundUser);
             return generateApiResponse(
                 res, StatusCodes.OK, true,
                 "User logged in successfully!",

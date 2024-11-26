@@ -1,3 +1,5 @@
+import { User } from "./user.types";
+
 export interface BackendApiResponse {
     isSuccess: boolean;
     message: string;
@@ -6,7 +8,4 @@ export interface BackendApiResponse {
 
 export type AuthToken = string;
 
-export interface AuthUser {
-    name: string;
-    email: string;
-};
+export interface AuthUser extends Pick<User, '_id' | 'name' | 'email'> { };
