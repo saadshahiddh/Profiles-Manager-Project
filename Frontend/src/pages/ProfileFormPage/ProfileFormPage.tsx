@@ -86,15 +86,22 @@ const ProfileFormContent = () => {
         setProfileFormData({ ...profileFormData, faqs });
     }
 
+    function updateCoverLettersState() {
+        //? Added this to update ck editors
+        setIsCoverLettersShown(false);
+        setTimeout(() => { setIsCoverLettersShown(true) }, 50);
+    }
+
     function addCoverLetter() {
         const emptyCoverLetter: CoverLetter = { profileId: profileFormData.profile._id, description: '' };
-        const coverLetters = profileFormData.coverLetters ? [...profileFormData.coverLetters, emptyCoverLetter] : [emptyCoverLetter];
+        const coverLetters = profileFormData.coverLetters ? [emptyCoverLetter, ...profileFormData.coverLetters] : [emptyCoverLetter];
         setProfileFormData({ ...profileFormData, coverLetters });
+        updateCoverLettersState();
     }
 
     function addFaq() {
         const emptyFaq: Faq = { profileId: profileFormData.profile._id, question: '', answer: '' };
-        const faqs = profileFormData.faqs ? [...profileFormData.faqs, emptyFaq] : [emptyFaq];
+        const faqs = profileFormData.faqs ? [emptyFaq, ...profileFormData.faqs] : [emptyFaq];
         setProfileFormData({ ...profileFormData, faqs });
     }
 
@@ -118,10 +125,7 @@ const ProfileFormContent = () => {
                 setProfileFormData({ ...profileFormData, coverLetters });
             };
             setCoverLetterDeleteIndex(null);
-
-            //? Added this to update ck editors
-            setIsCoverLettersShown(false);
-            setTimeout(() => { setIsCoverLettersShown(true) }, 50);
+            updateCoverLettersState();
         }
     }
 
@@ -180,9 +184,9 @@ const ProfileFormContent = () => {
                 <div>
                     {isLoading && <FaCircleNotch className='spinner-icon' size={50} />}
                 </div>
-                <div className='' style={{ position: 'fixed', zIndex: 9999, right: '30px', bottom: '30px' }}>
+                <div className='fixed right-10 bottom-10 z-50'>
                     <button onClick={saveProfileFormData}
-                        className="shadow px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 flex gap-2 items-center">
+                        className="shadow-lg px-4 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 flex gap-2 items-center">
                         <FaFloppyDisk size={20} />
                         <span>Save Profile</span>
                     </button>
@@ -226,12 +230,12 @@ const ProfileFormContent = () => {
 
                 <div>
                     <div className='w-full grid grid-cols-2 bg-white'>
-                        <div className={`cursor-pointer text-center border text-xl font-semibold p-3 ${bottomFormType == 'cover-letters' && 'bg-gray-500 text-white'}`}
-                            onClick={() => { setBottomFormType('cover-letters')}}>
+                        <div className={`cursor-pointer text-center border text-xl font-semibold p-3 ${bottomFormType == 'cover-letters' ? 'bg-gray-500 text-white hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                            onClick={() => { setBottomFormType('cover-letters') }}>
                             Cover Letters
                         </div>
-                        <div className={`cursor-pointer text-center border text-xl font-semibold p-3 ${bottomFormType == 'faqs' && 'bg-gray-500 text-white'}`}
-                            onClick={() => { setBottomFormType('faqs')}}>
+                        <div className={`cursor-pointer text-center border text-xl font-semibold p-3 ${bottomFormType == 'faqs' ? 'bg-gray-500 text-white hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                            onClick={() => { setBottomFormType('faqs') }}>
                             FAQs
                         </div>
                     </div>
@@ -259,19 +263,22 @@ const ProfileFormContent = () => {
                                                     return <div key={cInd}>
                                                         <div className='w-full'>
                                                             <div className='flex items-center justify-end mb-2'>
-                                                                <div>
-                                                                    <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == cInd ? 'bg-green-500' : 'bg-blue-500'}`} onClick={() => copyCoverLetter(cInd)}>
+                                                                <div className='flex gap-2'>
+                                                                    {!coverLetter?._id && (<span className='bg-gray-500 text-white text-sm font-medium px-2 py-1 rounded-full'>New</span>)}
+                                                                    <button className={`text-white p-1 rounded ${coverLetterCopiedIndex == cInd ? 'bg-green-500' : 'bg-blue-500'}`} onClick={() => copyCoverLetter(cInd)}>
                                                                         {coverLetterCopiedIndex == cInd ? <FaCheck /> : <FaCopy />}
                                                                     </button>
-                                                                    <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => setCoverLetterDeleteIndex(cInd)}>
+                                                                    <button className='bg-red-500 text-white p-1 rounded' onClick={() => setCoverLetterDeleteIndex(cInd)}>
                                                                         <FaTrash />
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                             {/* <input type="text" placeholder='I am a MERN stack developer.' name='description' value={item.description || ''} onChange={(e) => { handleCoverLetterDescriptionChange(e.target.value, cInd) }}
                                                             className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' /> */}
-                                                            <CKEditor editor={ClassicEditor} data={coverLetter.description || ''}
-                                                                onChange={(_, editor) => handleCoverLetterDescriptionChange(editor.getData(), cInd)} />
+                                                            <div className='ck-editor-editonly-div'>
+                                                                <CKEditor editor={ClassicEditor} data={coverLetter.description || ''}
+                                                                    onChange={(_, editor) => handleCoverLetterDescriptionChange(editor.getData(), cInd)} />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 })
@@ -315,7 +322,10 @@ const ProfileFormContent = () => {
                                                         <div className='w-full'>
                                                             <div className='w-full flex items-center justify-between'>
                                                                 <div className='text-gray-600 font-medium text-sm mb-1'>Question</div>
-                                                                <button className='bg-red-500 text-white px-2 rounded mb-2' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
+                                                                <div className='flex items-center gap-2 mb-2'>
+                                                                    {!faq?._id && (<span className='bg-gray-500 text-white text-sm font-medium px-2 py-1 rounded-full'>New</span>)}
+                                                                    <button className='bg-red-500 text-white px-2 rounded' onClick={() => setFaqDeleteIndex(fInd)}>X</button>
+                                                                </div>
                                                             </div>
                                                             <input type="text" placeholder='What is your experience?' name='question' value={faq.question || ''} onChange={(e) => { handleFaqInputChange(e, fInd) }}
                                                                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500' />

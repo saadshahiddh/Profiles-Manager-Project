@@ -29,12 +29,12 @@ body,
     }
 }
 
-.ck-editor__editable.ck-read-only,
-.ck-editor__editable.ck-read-only+.ck.ck-sticky-panel__content {
+.ck-editor-readonly-div .ck-editor__editable.ck-read-only,
+.ck-editor-readonly-div .ck-editor__editable.ck-read-only+.ck.ck-sticky-panel__content {
     border: none !important;
     outline: none !important;
 }
 
-.ck.ck-editor__editable {
+.ck-editor-editonly-div .ck.ck-editor__editable_inline {
     min-height: 500px;
 }

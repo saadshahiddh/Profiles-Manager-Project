@@ -46,7 +46,7 @@ const ProfileCoverLetters = ({ profileId, onCloseModal }: ProfileCoverLettersPro
                                                     {coverLetterCopiedIndex == ind ? <FaCheck /> : <FaCopy />}
                                                 </button>
                                             </div>
-                                            <div>
+                                            <div className='ck-editor-readonly-div'>
                                                 <CKEditor editor={ClassicEditor} data={coverLetter?.description}
                                                     config={{ toolbar: [] }} onReady={(editor) => { editor.enableReadOnlyMode('my-feature-id') }} />
                                             </div>

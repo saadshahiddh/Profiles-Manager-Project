@@ -147,7 +147,7 @@ const ProfilesContent = () => {
                                                         <div className={`w-full grid grid-cols-1 ${coverLetters.length > 1 && 'sm:grid-cols-2'} gap-1`}>
                                                             {
                                                                 coverLetters.map((coverLetter, cInd) => {
-                                                                    return <div key={cInd} className='border rounded'>
+                                                                    return <div key={cInd} className='border rounded ck-editor-readonly-div'>
                                                                         <CKEditor editor={ClassicEditor} data={coverLetter.description!.length > 140 ? coverLetter.description?.slice(0, coverLetter.description!.lastIndexOf(' ', 140)) + '...' : coverLetter?.description}
                                                                             config={{ toolbar: [] }} onReady={(editor) => { editor.enableReadOnlyMode('my-feature-id') }} />
                                                                     </div>
