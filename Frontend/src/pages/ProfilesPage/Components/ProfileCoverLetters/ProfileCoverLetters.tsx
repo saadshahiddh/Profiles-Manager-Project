@@ -32,15 +32,15 @@ const ProfileCoverLetters = ({ profileId, onCloseModal }: ProfileCoverLettersPro
 
     return (
         <>
-            <Modal onClose={onCloseModal}>
+            <Modal title='Profile Cover Letters' onClose={onCloseModal}>
                 <div className="w-full">
                     {
                         coverLetters?.length ? (
                             <>
                                 {
                                     coverLetters.map((coverLetter, ind) => {
-                                        return <div key={ind} className='border-b mb-5'>
-                                            <div className='flex justify-end mb-2'>
+                                        return <div key={ind} className='border rounded mb-5'>
+                                            <div className='flex justify-end p-3'>
                                                 <button className={`text-white p-1 rounded mx-1 ${coverLetterCopiedIndex == ind ? 'bg-green-500' : 'bg-blue-500'}`}
                                                     onClick={() => copyCoverLetter(ind)}>
                                                     {coverLetterCopiedIndex == ind ? <FaCheck /> : <FaCopy />}

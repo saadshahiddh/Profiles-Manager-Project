@@ -28,14 +28,14 @@ const ProfileFaqs = ({ profileId, onCloseModal }: ProfileFaqsProps) => {
 
     return (
         <>
-            <Modal onClose={onCloseModal}>
+            <Modal title='Profile FAQs' onClose={onCloseModal}>
                 <div className="w-full">
                     {
                         faqs?.length ? (
                             <>
                                 {
                                     faqs.map((faq, ind) => {
-                                        return <div key={ind} className='border-b pb-2 mb-3'>
+                                        return <div key={ind} className='p-3 mb-5 rounded border'>
                                             <div className='w-full flex flex-row'>
                                                 <div className='flex-grow text-gray-600 font-medium mb-1'>
                                                     {faq.question}
@@ -47,7 +47,8 @@ const ProfileFaqs = ({ profileId, onCloseModal }: ProfileFaqsProps) => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className='font-medium'>
+                                            <hr className='my-1' />
+                                            <div className='font-medium text-gray-800'>
                                                 {faq.answer}
                                             </div>
                                         </div>

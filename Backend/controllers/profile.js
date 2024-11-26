@@ -166,8 +166,8 @@ module.exports = {
                 },
                 {
                     $addFields: {
-                        coverLetters: { $slice: ['$coverLetters', 3] },
-                        faqs: { $slice: ['$faqs', 3] },
+                        coverLetters: { $slice: ['$coverLetters', 2] },
+                        faqs: { $slice: ['$faqs', 2] },
                     },
                 },
             ]);

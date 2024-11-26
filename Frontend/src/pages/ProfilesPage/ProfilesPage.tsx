@@ -90,7 +90,7 @@ const ProfilesContent = () => {
      */
     return <>
         <div className='w-full flex items-center justify-between'>
-            <div className='text-3xl font-bold'>Profiles</div>
+            <div className='text-3xl font-bold text-gray-800'>Profiles</div>
             <button onClick={addProfile} className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700">
                 Add
             </button>
@@ -103,51 +103,51 @@ const ProfilesContent = () => {
             (
                 profileDetailsList.length ? (
 
-                    <div className='grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-5'>
+                    <div className='grid gap-5 grid-cols-1 lg:grid-cols-2 mt-5'>
 
                         {/**
                         * Profiles Listing
                         */}
                         {
-                            profileDetailsList.map(({ _id, name, stack, type, createdAt, faqs, coverLetters }, pInd) => {
-                                return <div key={pInd} className='shadow border p-2 bg-white rounded'>
+                            profileDetailsList.map(({ _id, name, stack, type, updatedAt, faqs, coverLetters }, pInd) => {
+                                return <div key={pInd} className='shadow border bg-white rounded-lg flex flex-col'>
 
-                                    {/* Buttons */}
-                                    <div className='w-full flex items-center justify-end'>
-                                        <div>
-                                            <button className='bg-blue-500 text-white p-1 rounded mx-1' onClick={() => editProfile(_id)}>
-                                                <FaPenToSquare />
-                                            </button>
-                                            <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteProfile(_id)}>
-                                                <FaTrash />
-                                            </button>
-                                        </div>
-                                    </div>
 
                                     {/* Profile */}
-                                    <div className='w-full grid grid-cols-3 gap-x-1 gap-y-2'>
-                                        <div className='col-span-1 text-gray-600 font-medium text-sm'>Name:</div>
-                                        <div className='col-span-2 font-semibold'>{name}</div>
-                                        <div className='col-span-1 text-gray-600 font-medium text-sm'>Type:</div>
-                                        <div className='col-span-2 font-semibold'>{type}</div>
-                                        <div className='col-span-1 text-gray-600 font-medium text-sm'>Stack:</div>
-                                        <div className='col-span-2 font-semibold'>{stack}</div>
-                                        <div className='col-span-1 text-gray-600 font-medium text-sm'>Created:</div>
-                                        <div className='col-span-2 font-semibold'>{formatDateToMediumDate(createdAt)}</div>
+                                    <div className='flex flex-col flex-shrink w-full p-4'>
+                                        <div className='flex flex-row justify-between'>
+                                            <div className='flex-grow text-2xl font-bold text-gray-900'>{name}</div>
+
+                                            {/* Buttons */}
+                                            <div>
+                                                <button className='bg-blue-500 text-white p-1 rounded mx-1' onClick={() => editProfile(_id)}>
+                                                    <FaPenToSquare />
+                                                </button>
+                                                <button className='bg-red-500 text-white p-1 rounded mx-1' onClick={() => deleteProfile(_id)}>
+                                                    <FaTrash />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className='text-gray-700 text-lg mt-1'>
+                                            <span className='font-semibold'>{type}</span>
+                                            <span>&nbsp; — &nbsp;</span>
+                                            <span className='font-medium'>{stack}</span>
+                                        </div>
+                                        <div className='text-gray-500 font-medium text-sm mt-3'>(Updated: {formatDateToMediumDate(updatedAt)})</div>
                                     </div>
 
-                                    <hr className='my-3 border-2' />
 
                                     {/* Cover Letters */}
-                                    <div className="w-full">
+                                    <div className="flex flex-col flex-grow bg-gray-50 px-4 py-2 border-t-2">
                                         {
                                             coverLetters?.length ?
                                                 (
                                                     <>
+                                                        <div className='text-gray-700 text-center text-lg font-semibold mb-2'>Cover Letters</div>
                                                         <div className='w-full grid grid-cols-2 gap-1'>
                                                             {
-                                                                coverLetters.slice(0, 2).map((coverLetter, cInd) => {
-                                                                    return <div key={cInd} className='border'>
+                                                                coverLetters.map((coverLetter, cInd) => {
+                                                                    return <div key={cInd} className='border rounded'>
                                                                         <CKEditor editor={ClassicEditor} data={coverLetter.description!.length > 140 ? coverLetter.description?.slice(0, coverLetter.description!.lastIndexOf(' ', 140)) + '...' : coverLetter?.description}
                                                                             config={{ toolbar: [] }} onReady={(editor) => { editor.enableReadOnlyMode('my-feature-id') }} />
                                                                     </div>
@@ -155,39 +155,38 @@ const ProfilesContent = () => {
                                                             }
                                                         </div>
 
-                                                        <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showCoverLetters(_id)}>View More</div>
+                                                        <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showCoverLetters(_id)}>View Detail</div>
                                                     </>
                                                 ) : (
-                                                    <div className='text-center text-sm text-gray-500'>No Cover Letters!</div>
+                                                    <div className='flex flex-grow items-center justify-center text-center text-sm font-medium text-gray-500'>No Cover Letters!</div>
                                                 )
                                         }
                                     </div>
 
 
 
-                                    <hr className='my-3 border-2' />
-
                                     {/* FAQs */}
-                                    <div className="w-full">
+                                    <div className="flex flex-col flex-grow w-full border-t-2 bg-gray-50 px-4 py-2">
                                         {
                                             faqs?.length ? (
                                                 <>
+                                                    <div className='text-gray-700 text-center text-lg font-semibold mb-2'>FAQs</div>
                                                     {
-                                                        faqs.slice(0, 2).map((faq, fInd) => {
-                                                            return <div key={fInd} className='border-b pb-2 mb-1'>
+                                                        faqs.map((faq, fInd) => {
+                                                            return <div key={fInd} className='border pb-2 mb-1 bg-white p-2 rounded'>
                                                                 <div className='text-gray-600 font-medium text-sm mb-1'>
                                                                     {faq.question}
                                                                 </div>
-                                                                <div className='font-medium text-sm'>
-                                                                    {faq.answer}
+                                                                <div className='text-gray-800 font-medium text-sm'>
+                                                                    {faq.answer!.length > 80 ? faq.answer?.slice(0, faq.answer!.lastIndexOf(' ', 80)) + '...' : faq?.answer}
                                                                 </div>
                                                             </div>
                                                         })
                                                     }
-                                                    <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showFaqs(_id)}>View More</div>
+                                                    <div className='text-center text-sm mt-2 font-semibold cursor-pointer text-blue-500 hover:underline' onClick={() => showFaqs(_id)}>View Detail</div>
                                                 </>
                                             ) : (
-                                                <div className='text-center text-sm text-gray-500'>No FAQs!</div>
+                                                <div className='flex flex-grow items-center justify-center text-center text-sm font-medium text-gray-500'>No FAQs!</div>
                                             )
                                         }
                                     </div>

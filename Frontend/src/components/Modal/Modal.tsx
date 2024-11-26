@@ -4,15 +4,17 @@ import { FaXmark } from 'react-icons/fa6';
 import MyButton from '../MyButton/MyButton';
 
 interface ModalProps {
+    title?: string;
     onClose: () => void;
     children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal bg-white p-5 rounded" onClick={(e) => e.stopPropagation()}>
-                <div className="w-full flex justify-end">
+                <div className="w-full flex justify-between">
+                    <div className='text-2xl font-bold'>{title}</div>
                     <FaXmark className="cursor-pointer" onClick={onClose} />
                 </div>
                 <hr className='my-3' />
